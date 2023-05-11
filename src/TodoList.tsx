@@ -25,14 +25,18 @@ const TodoList: FC<TodoListPropsType> = ({
     let [input, setInput] = useState('')
 
     const tasksJSX:Array<JSX.Element> = tasks.map((t) => {
-            return (
-                <li key={t.id}>
-                    <input type="checkbox" checked={t.isDone}/>
-                    <span>{t.title}</span>
-                    <button onClick={() => removeTask(t.id)}>x</button>
-                </li>
-            )
-        })
+        const onClickHandler = () => {
+            removeTask(t.id)
+        }
+
+        return (
+            <li key={t.id}>
+                <input type="checkbox" checked={t.isDone}/>
+                <span>{t.title}</span>
+                <button onClick={onClickHandler}>x</button>
+            </li>
+        )
+    })
 
     // фильтрация при клике на all
     const onAllClickHandler = () => {
