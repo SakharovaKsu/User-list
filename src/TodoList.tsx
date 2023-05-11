@@ -4,12 +4,12 @@ import {FilterValuesType} from "./App";
 type TodoListPropsType = {
     title: string
     tasks: TaskType[]
-    removeTask: (taskId: number) => void // void - это ничего, ставим что получаем на выходе функции
+    removeTask: (taskId: string) => void // void - это ничего, ставим что получаем на выходе функции
     changeFilter: (filter:FilterValuesType) => void
 }
 
 export type TaskType = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 }
