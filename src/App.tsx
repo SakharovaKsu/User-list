@@ -37,6 +37,13 @@ function App() {
         setTasks(updatedTasks)
     }
 
+    // Добавление таски
+    const addTask = (input: string) => {
+        let newTask = {id: v1(), title: input, isDone: false}
+        let newTasks = [newTask, ...tasks] // Добавляем новую таску в массив
+        setTasks(newTasks)
+    }
+
     return (
         <div className="App">
             <TodoList
@@ -44,6 +51,7 @@ function App() {
                 title={title}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
+                addTask={addTask}
             />
         </div>
     );
