@@ -2,7 +2,7 @@ import React, {FC, useState, KeyboardEvent, ChangeEvent} from 'react';
 import {FilterValuesType} from "./App";
 
 type TodoListPropsType = {
-    title: string
+    todoListTitle: string
     tasks: TaskType[]
     removeTask: (taskId: string) => void // void - это ничего, ставим что получаем на выходе функции
     changeFilter: (filter:FilterValuesType) => void
@@ -16,13 +16,13 @@ export type TaskType = {
 }
 
 const TodoList: FC<TodoListPropsType> = ({
-    title,
+    todoListTitle,
     tasks,
     removeTask,
     changeFilter,
     addTask}) => {
 
-    let [input, setInput] = useState('')
+    let [title, setTitle] = useState('')
 
     const tasksJSX:Array<JSX.Element> = tasks.map((t) => {
         const onClickHandler = () => {
@@ -54,13 +54,13 @@ const TodoList: FC<TodoListPropsType> = ({
     }
 
     const newTask = () => {
-        addTask(input) // добавляем новую таску
-        setInput('') // делаем пустую строку по умолчанию после добавления новой таски
+        addTask(title) // добавляем новую таску
+        setTitle('') // делаем пустую строку по умолчанию после добавления новой таски
     }
 
     // Получаем значение из инпута и добавляем в setInput
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
-        setInput(e.currentTarget.value)
+        setTitle(e.currentTarget.value)
     }
 
     // Добвляем новую таску при нажатии на Enter
@@ -71,10 +71,10 @@ const TodoList: FC<TodoListPropsType> = ({
     return (
         <div className="todoList">
             <div>
-                <h3>{title}</h3>
+                <h3>{todoListTitle}</h3>
                 <div>
                     <input
-                        value={input}
+                        value={title}
                         onChange={onChangeHandler}
                         onKeyPress={onKeyPressHandler}/>
                     <button onClick={newTask}>+</button>

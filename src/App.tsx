@@ -6,7 +6,7 @@ import {v1} from "uuid";
 export type FilterValuesType = 'all' | 'active' | 'completed' // либо то, либо, либо то
 function App() {
 
-    const title = 'What to learn'
+    const todoListTitle = 'What to learn'
 
     const [tasks, setTasks] = useState<TaskType[]>(
         [
@@ -38,8 +38,8 @@ function App() {
     }
 
     // Добавление таски
-    const addTask = (input: string) => {
-        let newTask = {id: v1(), title: input, isDone: false}
+    const addTask = (title: string) => {
+        let newTask = {id: v1(), title: title, isDone: false}
         let newTasks = [newTask, ...tasks] // Добавляем новую таску в массив
         setTasks(newTasks)
     }
@@ -48,7 +48,7 @@ function App() {
         <div className="App">
             <TodoList
                 tasks={filteredTasks}
-                title={title}
+                todoListTitle={todoListTitle}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
