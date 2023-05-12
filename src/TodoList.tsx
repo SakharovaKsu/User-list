@@ -61,6 +61,7 @@ const TodoList: FC<TodoListPropsType> = ({
     // Получаем значение из инпута и добавляем в setInput
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
+        // обращаемся к инпуту через событие e.currentTarget к его значению, которое хочет напечататься и отправляем его в стейт
     }
 
     // Добвляем новую таску при нажатии на Enter
@@ -74,6 +75,7 @@ const TodoList: FC<TodoListPropsType> = ({
                 <h3>{todoListTitle}</h3>
                 <div>
                     <input
+                         // в value добавляем title, в котором хранится наше значение в стейте (25 строка)
                         value={title}
                         onChange={onChangeHandler}
                         onKeyPress={onKeyPressHandler}/>

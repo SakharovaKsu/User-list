@@ -38,6 +38,7 @@ function App() {
     }
 
     // Добавление таски
+    // через title получаем значение инпута
     const addTask = (title: string) => {
         let newTask = {id: v1(), title: title, isDone: false}
         let newTasks = [newTask, ...tasks] // Добавляем новую таску в массив
