@@ -15,6 +15,12 @@ function App() {
             { id: v1(), title: 'React', isDone: false }
         ]
     )
+
+    // id всегда слева первая
+    const changeStatus = (taskID: string, checkedValue: boolean) => {
+        setTasks(tasks.map(el => el.id === taskID ? {...el, isDone: checkedValue} : el)) // делаем копию через map (массива и всех объектов), ищем id (а можем и не найти, то ничего не возвращает), если нашла - копируем объект (...el). и перезаписываем isDone: checkedValue. Он перезапишется так как старое значение будет совпадать по названию с новым
+    }
+
     const [filter, setFilter] = useState<FilterValuesType>('all') // all это по умолчанию
 
     const changeFilter = (filter:FilterValuesType) => {
@@ -23,7 +29,7 @@ function App() {
     const getFilterTasks = (tasks:Array<TaskType>, filter: FilterValuesType): Array<TaskType> => {
         switch (filter) {
             case 'active':
-                return tasks.filter(t => !t.isDone) // те что еще таски не выполненны
+                return tasks.filter(t => !t.isDone) // те что еще таски не выполнены
             case 'completed':
                 return  tasks.filter(t => t.isDone) // выполненные таски
             default:
@@ -53,6 +59,7 @@ function App() {
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
+                changeStatus={changeStatus}
             />
         </div>
     );
