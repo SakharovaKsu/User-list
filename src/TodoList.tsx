@@ -4,11 +4,14 @@ import s from './TodoList.module.css';
 
 type TodoListPropsType = {
     todoListTitle: string
+    todoListId: string
     tasks: TaskType[]
-    removeTask: (taskId: string) => void // void - это ничего, ставим что получаем на выходе функции
-    changeFilter: (filter:FilterValuesType) => void
-    addTask: (input: string) => void
-    changeStatus: (taskID: string, checkedValue: boolean) => void
+    removeTask: (todoListId: string, taskId: string) => void // void - это ничего, ставим что получаем на выходе функции
+    changeFilter: (todoListId: string, filter:FilterValuesType) => void
+    addTask: (todoListId: string, title: string) => void
+    changeStatus: (todoListId: string, taskID: string, isDone: boolean) => void
+    filter: FilterValuesType
+    removeTodoList: (todoListId: string) => void
 }
 
 export type TaskType = {
@@ -18,25 +21,27 @@ export type TaskType = {
 }
 
 const TodoList: FC<TodoListPropsType> = ({
+    todoListId,
     todoListTitle,
     tasks,
     removeTask,
     changeFilter,
     addTask,
-    changeStatus}) => {
+    changeStatus,
+    removeTodoList}) => {
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null >('') // принимает либо строку, либо null
     const [buttonName, setButtonName] = useState<FilterValuesType>('all')
 
     //  Лишка
-    const tasksJSX:Array<JSX.Element> = tasks.map((t) => {
+    const tasksJSX:Array<JSX.Element> = tasks?.map((t) => {
         const onClickHandler = () => {
-            removeTask(t.id)
+            removeTask(todoListId, t.id)
         }
 
         const changeStatusHandler = (e:ChangeEvent<HTMLInputElement>) => {
-            changeStatus(t.id, e.currentTarget.checked)
+            changeStatus(todoListId, t.id, e.currentTarget.checked)
         }
 
         return (
@@ -68,7 +73,7 @@ const TodoList: FC<TodoListPropsType> = ({
 
     // фильтрация при клике
     const tsarHandler = (value: FilterValuesType) => {
-        changeFilter(value)
+        changeFilter(todoListId,value)
         setButtonName(value)
     }
 
@@ -76,7 +81,7 @@ const TodoList: FC<TodoListPropsType> = ({
         // если после trim остается хоть один знак, то добавляй новую таску, если же знаков нет, то не добавляешь
         // trim убирает не нужные пробелы
         if(title.trim()) {
-            addTask(title.trim()) // добавляем новую таску
+            addTask(todoListId, title.trim()) // добавляем новую таску
             setTitle('') // делаем пустую строку по умолчанию после добавления новой таски
         } else {
             setError('Title is required') // ошибка если ничего не набрано в инпуте
@@ -96,10 +101,15 @@ const TodoList: FC<TodoListPropsType> = ({
         if(e.key === 'Enter') newTask()
     }
 
+    const removeTodoListHandler = () => {
+        removeTodoList(todoListId)
+    }
+
     return (
         <div className="todoList">
             <div>
                 <h3>{todoListTitle}</h3>
+                <button onClick={removeTodoListHandler}>X</button>
                 <div>
                     <input className={error ? s.error : ''}
                          // в value добавляем title, в котором хранится наше значение в стейте (25 строка)
@@ -110,7 +120,7 @@ const TodoList: FC<TodoListPropsType> = ({
                 </div>
                 {/* если error ровняется true, то показываем ошибку */}
                 {error && <div className={s.errorMessage}>{error}</div>}
-                <ul> {tasksJSX}</ul>
+                <ul>{tasksJSX}</ul>
                 <div>
                     <button
                         className={buttonName === 'all' ? s.allFilter : ''}
