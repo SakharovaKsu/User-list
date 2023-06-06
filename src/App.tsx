@@ -55,8 +55,19 @@ function App() {
         // копируем полностью объект и после этого вносим изменения
     }
 
+    const updateTask = (todoListId: string, taskId: string, updateTitle: string) => {
+        setTasks({
+            ...tasks,
+            [todoListId]: tasks[todoListId]
+                .map(el => el.id === taskId ? {...el, title: updateTitle} : el)
+        })
+    }
+
     const removeTask = (todoListId: string, taskId: string) => {
-        setTasks({...tasks, [todoListId]: tasks[todoListId].filter(el => el.id !== taskId)})
+        setTasks({
+            ...tasks,
+            [todoListId]: tasks[todoListId].filter(el => el.id !== taskId)
+        })
     }
 
     // Добавление таски
@@ -105,6 +116,7 @@ function App() {
                 return (
                     <TodoList
                         key={tl.id}
+                        updateTask={updateTask}
                         todoListId={tl.id}
                         tasks={tasksForTodoList}
                         todoListTitle={tl.title}

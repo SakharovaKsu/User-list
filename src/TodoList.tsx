@@ -2,6 +2,7 @@ import React, {FC, useState, KeyboardEvent, ChangeEvent} from 'react';
 import {FilterValuesType} from "./App";
 import s from './TodoList.module.css';
 import AddItemForm from "./AddItemForm";
+import EditableSpan from "./EditableSpan";
 
 type TodoListPropsType = {
     todoListTitle: string
@@ -13,6 +14,7 @@ type TodoListPropsType = {
     changeStatus: (todoListId: string, taskID: string, isDone: boolean) => void
     filter: FilterValuesType
     removeTodoList: (todoListId: string) => void
+    updateTask: (todoListId: string, taskId: string, updateTitle: string) => void
 }
 
 export type TaskType = {
@@ -29,12 +31,17 @@ const TodoList: FC<TodoListPropsType> = ({
     changeFilter,
     addTask,
     changeStatus,
-    removeTodoList}) => {
+    removeTodoList,
+    updateTask}) => {
 
     const [buttonName, setButtonName] = useState<FilterValuesType>('all')
 
     const addTaskHandler = (title: string) => {
         addTask(todoListId, title)
+    }
+
+    const updateTaskHandler = (tID: string, updateTitle: string) => {
+        updateTask(todoListId, tID, updateTitle)
     }
 
     //  Лишка
@@ -50,7 +57,7 @@ const TodoList: FC<TodoListPropsType> = ({
         return (
             <li className={t.isDone ? s.isDone : ''} key={t.id}>
                 <input type="checkbox" checked={t.isDone} onChange={changeStatusHandler}/>
-                <span>{t.title}</span>
+                <EditableSpan oldTitle={t.title} callback={(updateTitle) => updateTaskHandler(t.id, updateTitle)}/>
                 <button onClick={onClickHandler}>x</button>
             </li>
         )
@@ -89,7 +96,7 @@ const TodoList: FC<TodoListPropsType> = ({
             <div>
                 <h3>{todoListTitle}</h3>
                 <button onClick={removeTodoListHandler}>X</button>
-                <AddItemForm addTodoList={addTaskHandler}/>
+                <AddItemForm callback={addTaskHandler}/>
                 <ul>{tasksJSX}</ul>
                 <div>
                     <button
