@@ -50,14 +50,10 @@ function App() {
 
     }
 
-    // const [filter, setFilter] = useState<FilterValuesType>('all') // all это по умолчанию
-
     const changeFilter = (todoListId: string, value:FilterValuesType) => {
         setTodoList(todoList.map(el => el.id === todoListId ? {...el, filter: value} : el))
         // копируем полностью объект и после этого вносим изменения
     }
-
-    // const filteredTasks: Array<TaskType> = getFilterTasks(tasks, filter)
 
     const removeTask = (todoListId: string, taskId: string) => {
         setTasks({...tasks, [todoListId]: tasks[todoListId].filter(el => el.id !== taskId)})
@@ -83,9 +79,17 @@ function App() {
         delete tasks[todoListId] // удаляем еще таску, так как она уже больше не нужна, так как удалился todoList, а хлам не нужно хранить
     }
 
+    // добавление нового тудулиста
+    const addTodoList = (newTitle: string) => {
+        const todoListId = v1()
+        const newTodo: TodoListType = {id: todoListId, title: newTitle, filter: 'all'}
+        setTodoList([...todoList, newTodo])
+        setTasks({...tasks, [todoListId]:[]})
+    }
+
     return (
         <div className="App">
-            {/*<AddItemForm addTask={addTask} todoListId={todoListId}/>*/}
+            <AddItemForm callback={addTodoList} />
             {todoList.map(tl => {
 
                 let tasksForTodoList = tasks[tl.id]

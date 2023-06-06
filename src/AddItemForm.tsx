@@ -2,11 +2,10 @@ import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
 import s from "./TodoList.module.css";
 
 type AddItemFormType = {
-    addTask: (todoListId: string, title: string) => void
-    todoListId: string
+    callback: (title: string) => void
 }
 
-export const AddItemForm:FC<AddItemFormType> = ({addTask, todoListId}) => {
+export const AddItemForm:FC<AddItemFormType> = ({callback,}) => {
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null >('') // принимает либо строку, либо null
 
@@ -14,7 +13,7 @@ export const AddItemForm:FC<AddItemFormType> = ({addTask, todoListId}) => {
         // если после trim остается хоть один знак, то добавляй новую таску, если же знаков нет, то не добавляешь
         // trim убирает не нужные пробелы
         if(title.trim()) {
-            addTask(todoListId, title.trim()) // добавляем новую таску
+            callback(title.trim()) // добавляем новую таску
             setTitle('') // делаем пустую строку по умолчанию после добавления новой таски
         } else {
             setError('Title is required') // ошибка если ничего не набрано в инпуте
