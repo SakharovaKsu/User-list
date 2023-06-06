@@ -15,6 +15,7 @@ type TodoListPropsType = {
     filter: FilterValuesType
     removeTodoList: (todoListId: string) => void
     updateTask: (todoListId: string, taskId: string, updateTitle: string) => void
+    updateTodoList: (todoListId: string, updateTitle: string) => void
 }
 
 export type TaskType = {
@@ -32,12 +33,17 @@ const TodoList: FC<TodoListPropsType> = ({
     addTask,
     changeStatus,
     removeTodoList,
-    updateTask}) => {
+    updateTask,
+    updateTodoList}) => {
 
     const [buttonName, setButtonName] = useState<FilterValuesType>('all')
 
     const addTaskHandler = (title: string) => {
         addTask(todoListId, title)
+    }
+
+    const updateTodoListHandler = (updateTitle: string) => {
+        updateTodoList(todoListId, updateTitle)
     }
 
     const updateTaskHandler = (tID: string, updateTitle: string) => {
@@ -94,8 +100,10 @@ const TodoList: FC<TodoListPropsType> = ({
     return (
         <div className="todoList">
             <div>
-                <h3>{todoListTitle}</h3>
-                <button onClick={removeTodoListHandler}>X</button>
+                <h3>
+                    <EditableSpan oldTitle={todoListTitle} callback={updateTodoListHandler}/>
+                    <button onClick={removeTodoListHandler}>X</button>
+                </h3>
                 <AddItemForm callback={addTaskHandler}/>
                 <ul>{tasksJSX}</ul>
                 <div>

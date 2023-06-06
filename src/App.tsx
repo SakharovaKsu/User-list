@@ -55,6 +55,10 @@ function App() {
         // копируем полностью объект и после этого вносим изменения
     }
 
+    const updateTodoList = (todoListId: string, updateTitle: string) => {
+        setTodoList(todoList.map(el => el.id === todoListId ? {...el, title: updateTitle} : el))
+    }
+
     const updateTask = (todoListId: string, taskId: string, updateTitle: string) => {
         setTasks({
             ...tasks,
@@ -106,17 +110,18 @@ function App() {
                 let tasksForTodoList = tasks[tl.id]
 
                 if(tl.filter === 'active') {
-                    tasksForTodoList = tasks[tl.id].filter(t => t.isDone === false)
+                    tasksForTodoList = tasks[tl.id].filter(t => !t.isDone )
                 }
 
                 if(tl.filter === 'completed') {
-                    tasksForTodoList = tasks[tl.id].filter(t => t.isDone === false)
+                    tasksForTodoList = tasks[tl.id].filter(t => !t.isDone )
                 }
 
                 return (
                     <TodoList
                         key={tl.id}
                         updateTask={updateTask}
+                        updateTodoList={updateTodoList}
                         todoListId={tl.id}
                         tasks={tasksForTodoList}
                         todoListTitle={tl.title}
