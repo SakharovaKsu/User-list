@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import {v1} from "uuid";
+import AddItemForm from "./AddItemForm";
 
 
 export type FilterValuesType = 'all' | 'active' | 'completed' // либо то, либо, либо то
@@ -73,7 +74,7 @@ function App() {
         } else {
             setTasks({...tasks, [todoListId]: [newTask]})
         }
-        
+
         // {...tasks} - копируем весь таск, далее копируем массив тасок по id, в эту копию добавляем новую таску (newTask) и копируем ...tasks[todoListId]
     }
 
@@ -84,6 +85,7 @@ function App() {
 
     return (
         <div className="App">
+            {/*<AddItemForm addTask={addTask} todoListId={todoListId}/>*/}
             {todoList.map(tl => {
 
                 let tasksForTodoList = tasks[tl.id]
