@@ -1,8 +1,11 @@
-import React, {FC, useState, KeyboardEvent, ChangeEvent} from 'react';
+import React, {FC, useState, ChangeEvent} from 'react';
 import {FilterValuesType} from "./App";
 import s from './TodoList.module.css';
 import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Button from "@mui/material/Button";
 
 type TodoListPropsType = {
     todoListTitle: string
@@ -64,21 +67,23 @@ const TodoList: FC<TodoListPropsType> = ({
             <li className={t.isDone ? s.isDone : ''} key={t.id}>
                 <input type="checkbox" checked={t.isDone} onChange={changeStatusHandler}/>
                 <EditableSpan oldTitle={t.title} callback={(updateTitle) => updateTaskHandler(t.id, updateTitle)}/>
-                <button onClick={onClickHandler}>x</button>
+                <IconButton aria-label="delete" onClick={onClickHandler}>
+                    <DeleteIcon />
+                </IconButton>
             </li>
         )
     })
 
     // фильтрация при клике на all
     // const onAllClickHandler = () => {
-    //     changeFilter('all')
-    //     setButtonName('all')
+    //  changeFilter('all')
+    //  setButtonName('all')
     // }
 
     // фильтрация при клике на active
     // const onActiveHandler = () => {
-    //     changeFilter('active')
-    //     setButtonName('active')
+    //   changeFilter('active')
+    //   setButtonName('active')
     // }
 
     // фильтрация при клике на completed
@@ -102,11 +107,24 @@ const TodoList: FC<TodoListPropsType> = ({
             <div>
                 <h3>
                     <EditableSpan oldTitle={todoListTitle} callback={updateTodoListHandler}/>
-                    <button onClick={removeTodoListHandler}>X</button>
+                    <IconButton aria-label="delete" onClick={removeTodoListHandler}>
+                        <DeleteIcon />
+                    </IconButton>
                 </h3>
                 <AddItemForm callback={addTaskHandler}/>
                 <ul>{tasksJSX}</ul>
                 <div>
+                    <Button variant={buttonName === 'all' ? 'contained' : 'outlined'}
+                            onClick={() => tsarHandler('all')}
+                    >All</Button>
+                    <Button variant={buttonName === 'active' ? 'contained' : 'outlined'}
+                            onClick={() => tsarHandler('active')}
+                    >Active</Button>
+                    <Button variant={buttonName === 'completed' ? 'contained' : 'outlined'}
+                            onClick={() => tsarHandler('completed')}
+                    >Completed</Button>
+
+
                     <button
                         className={buttonName === 'all' ? s.allFilter : ''}
                         onClick={() => tsarHandler('all')}

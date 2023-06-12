@@ -1,5 +1,6 @@
 import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
 import s from "./TodoList.module.css";
+import Button from "@mui/material/Button";
 
 type AddItemFormType = {
     callback: (title: string) => void
@@ -32,6 +33,16 @@ export const AddItemForm:FC<AddItemFormType> = ({callback,}) => {
         if(e.key === 'Enter') newTask()
     }
 
+    const buttonStyles = {
+        maxWidth: '30px',
+        maxHeight: '30px',
+        minWidth: '30px',
+        minHeight: '30px',
+        backgroundColor: '#ffff73',
+        borderColor: '#7109aa',
+        color: '#7109aa'
+    }
+
     return (
         <div>
             <div>
@@ -40,7 +51,9 @@ export const AddItemForm:FC<AddItemFormType> = ({callback,}) => {
                        value={title}
                        onChange={onChangeHandler}
                        onKeyPress={onKeyPressHandler}/>
-                <button onClick={newTask}>+</button>
+                <Button variant="outlined"
+                        style={buttonStyles}
+                        onClick={newTask}>+</Button>
             </div>
 
             {/*если error ровняется true, то показываем ошибку*/}
