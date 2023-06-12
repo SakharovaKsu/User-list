@@ -1,6 +1,7 @@
 import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
 import s from "./TodoList.module.css";
 import Button from "@mui/material/Button";
+import TextField from '@mui/material/TextField';
 
 type AddItemFormType = {
     callback: (title: string) => void
@@ -34,30 +35,34 @@ export const AddItemForm:FC<AddItemFormType> = ({callback,}) => {
     }
 
     const buttonStyles = {
-        maxWidth: '30px',
-        maxHeight: '30px',
-        minWidth: '30px',
-        minHeight: '30px',
-        backgroundColor: '#ffff73',
-        borderColor: '#7109aa',
-        color: '#7109aa'
+        maxWidth: '40px',
+        maxHeight: '40px',
+        minWidth: '40px',
+        minHeight: '40px',
     }
 
     return (
         <div>
             <div>
-                <input className={error ? s.error : ''}
-                    // в value добавляем title, в котором хранится наше значение в стейте (25 строка)
-                       value={title}
-                       onChange={onChangeHandler}
-                       onKeyPress={onKeyPressHandler}/>
+                {/* !!error - превращаем строку в true, а если один !, то это уже false */}
+                <TextField
+                    error={!!error}
+                    id="outlined-basic"
+                    label={error ? 'Title is required' : 'please type smth... )'  }
+                    variant="outlined"
+                    size={'small'}
+                    value={title}
+                    onChange={onChangeHandler}
+                    onKeyPress={onKeyPressHandler}/>
+                {/*в value добавляем title, в котором хранится наше значение в стейте (25 строка)*/}
                 <Button variant="outlined"
+                        color="success"
                         style={buttonStyles}
                         onClick={newTask}>+</Button>
             </div>
 
             {/*если error ровняется true, то показываем ошибку*/}
-            {error && <div className={s.errorMessage}>{error}</div>}
+            {/*{error && <div className={s.errorMessage}>{error}</div>}*/}
         </div>
     )
 };

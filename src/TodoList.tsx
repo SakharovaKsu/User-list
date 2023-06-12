@@ -6,6 +6,7 @@ import EditableSpan from "./EditableSpan";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
 
 type TodoListPropsType = {
     todoListTitle: string
@@ -35,6 +36,7 @@ const TodoList: FC<TodoListPropsType> = ({
     changeFilter,
     addTask,
     changeStatus,
+    filter,
     removeTodoList,
     updateTask,
     updateTodoList}) => {
@@ -64,13 +66,13 @@ const TodoList: FC<TodoListPropsType> = ({
         }
 
         return (
-            <li className={t.isDone ? s.isDone : ''} key={t.id}>
-                <input type="checkbox" checked={t.isDone} onChange={changeStatusHandler}/>
+            <div className={t.isDone ? s.isDone : ''} key={t.id}>
+                <Checkbox checked={t.isDone} color="success" onChange={changeStatusHandler}/>
                 <EditableSpan oldTitle={t.title} callback={(updateTitle) => updateTaskHandler(t.id, updateTitle)}/>
-                <IconButton aria-label="delete" onClick={onClickHandler}>
+                <IconButton aria-label="delete" color="success" onClick={onClickHandler}>
                     <DeleteIcon />
                 </IconButton>
-            </li>
+            </div>
         )
     })
 
@@ -94,7 +96,7 @@ const TodoList: FC<TodoListPropsType> = ({
 
     // фильтрация при клике
     const tsarHandler = (value: FilterValuesType) => {
-        changeFilter(todoListId,value)
+        changeFilter(todoListId, value)
         setButtonName(value)
     }
 
@@ -105,40 +107,27 @@ const TodoList: FC<TodoListPropsType> = ({
     return (
         <div className="todoList">
             <div>
-                <h3>
+                <h3 className={s.title}>
                     <EditableSpan oldTitle={todoListTitle} callback={updateTodoListHandler}/>
                     <IconButton aria-label="delete" onClick={removeTodoListHandler}>
                         <DeleteIcon />
                     </IconButton>
                 </h3>
                 <AddItemForm callback={addTaskHandler}/>
-                <ul>{tasksJSX}</ul>
+                <div>{tasksJSX}</div>
                 <div>
                     <Button variant={buttonName === 'all' ? 'contained' : 'outlined'}
+                            color="success"
                             onClick={() => tsarHandler('all')}
                     >All</Button>
                     <Button variant={buttonName === 'active' ? 'contained' : 'outlined'}
+                            color="success"
                             onClick={() => tsarHandler('active')}
                     >Active</Button>
                     <Button variant={buttonName === 'completed' ? 'contained' : 'outlined'}
+                            color="success"
                             onClick={() => tsarHandler('completed')}
                     >Completed</Button>
-
-
-                    <button
-                        className={buttonName === 'all' ? s.allFilter : ''}
-                        onClick={() => tsarHandler('all')}
-                    >All</button>
-
-                    <button
-                        className={buttonName === 'active' ? s.allFilter : ''}
-                        onClick={() => tsarHandler('active')}
-                    >Active</button>
-
-                    <button
-                        className={buttonName === 'completed' ? s.allFilter : ''}
-                        onClick={() => tsarHandler('completed')}
-                    >Completed</button>
                 </div>
             </div>
         </div>
