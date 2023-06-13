@@ -41,10 +41,12 @@ const TodoList: FC<TodoListPropsType> = ({
     updateTask,
     updateTodoList}) => {
 
-    const [buttonName, setButtonName] = useState<FilterValuesType>('all')
-
     const addTaskHandler = (title: string) => {
         addTask(todoListId, title)
+    }
+
+    const removeTodoListHandler = () => {
+        removeTodoList(todoListId);
     }
 
     const updateTodoListHandler = (updateTitle: string) => {
@@ -76,33 +78,11 @@ const TodoList: FC<TodoListPropsType> = ({
         )
     })
 
-    // фильтрация при клике на all
-    // const onAllClickHandler = () => {
-    //  changeFilter('all')
-    //  setButtonName('all')
-    // }
-
-    // фильтрация при клике на active
-    // const onActiveHandler = () => {
-    //   changeFilter('active')
-    //   setButtonName('active')
-    // }
-
-    // фильтрация при клике на completed
-    // const onCompletedHandler = () => {
-    //     changeFilter('completed')
-    //     setButtonName('completed')
-    // }
-
     // фильтрация при клике
     const tsarHandler = (value: FilterValuesType) => {
         changeFilter(todoListId, value)
-        setButtonName(value)
     }
 
-    const removeTodoListHandler = () => {
-        removeTodoList(todoListId)
-    }
 
     return (
         <div className="todoList">
@@ -116,15 +96,15 @@ const TodoList: FC<TodoListPropsType> = ({
                 <AddItemForm callback={addTaskHandler}/>
                 <div>{tasksJSX}</div>
                 <div>
-                    <Button variant={buttonName === 'all' ? 'contained' : 'outlined'}
+                    <Button variant={filter === 'all' ? 'contained' : 'outlined'}
                             color="success"
                             onClick={() => tsarHandler('all')}
                     >All</Button>
-                    <Button variant={buttonName === 'active' ? 'contained' : 'outlined'}
+                    <Button variant={filter === 'active' ? 'contained' : 'outlined'}
                             color="success"
                             onClick={() => tsarHandler('active')}
                     >Active</Button>
-                    <Button variant={buttonName === 'completed' ? 'contained' : 'outlined'}
+                    <Button variant={filter === 'completed' ? 'contained' : 'outlined'}
                             color="success"
                             onClick={() => tsarHandler('completed')}
                     >Completed</Button>

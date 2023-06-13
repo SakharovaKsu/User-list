@@ -16,35 +16,38 @@ type TodoListType = {
     filter: FilterValuesType
 }
 type TaskAssocType = {
-    [key: string] : TaskType[]
+    [key: string]: TaskType[]
 }
+
+const todoListId1 = v1()
+const todoListId2 = v1()
+
+const defTasks = {
+    [todoListId1]: [
+        {id: v1(), title: 'HTML&CSS', isDone: true},
+        {id: v1(), title: 'JS', isDone: true},
+        {id: v1(), title: 'React', isDone: false},
+        {id: v1(), title: 'TS', isDone: false}
+    ],
+    [todoListId2]: [
+        {id: v1(), title: 'HTML&CSS', isDone: true},
+        {id: v1(), title: 'JS', isDone: true},
+        {id: v1(), title: 'React', isDone: false},
+        {id: v1(), title: 'TS', isDone: false}
+    ]
+}
+
+// [todoListId1] обернули в скобки, что б получить то, что лежит в переменной, если ставим без кавычек, то этот ключ превратится в стрингу под капотом
+
+const defTodo: TodoListType[] = [
+    {id: todoListId1, title: 'What to learn', filter: 'all'},
+    {id: todoListId2, title: 'What to buy', filter: 'all'}
+]
 
 function App() {
 
-    const todoListId1 = v1()
-    const todoListId2 = v1()
-
-    const [tasks, setTasks] = useState<TaskAssocType>({
-        [todoListId1]: [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'React', isDone: false},
-            {id: v1(), title: 'TS', isDone: false}
-        ],
-        [todoListId2]: [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'React', isDone: false},
-            {id: v1(), title: 'TS', isDone: false}
-        ]
-    })
-
-    // [todoListId1] обернули в скобки, что б получить то, что лежит в переменной, если ставим без кавычек, то этот ключ превратится в стрингу под капотом
-
-    const [todoList, setTodoList] = useState<TodoListType[]>([
-        {id: todoListId1, title: 'What to learn', filter: 'all'},
-        {id: todoListId2, title: 'What to buy', filter: 'all'}
-    ])
+    const [tasks, setTasks] = useState<TaskAssocType>(defTasks)
+    const [todoList, setTodoList] = useState<TodoListType[]>(defTodo)
 
     // id всегда слева первая
     const changeStatus = (todoListId: string, taskID: string, isDone: boolean) => {
@@ -83,7 +86,6 @@ function App() {
     // через title получаем значение инпута
     const addTask = (todoListId: string, title: string) => {
         let newTask = {id: v1(), title: title, isDone: false}
-
 
         if(tasks[todoListId]) {
             setTasks({...tasks, [todoListId]: [newTask, ...tasks[todoListId]]})
@@ -125,7 +127,7 @@ function App() {
                         }
 
                         if(tl.filter === 'completed') {
-                            tasksForTodoList = tasks[tl.id].filter(t => !t.isDone )
+                            tasksForTodoList = tasks[tl.id].filter(t => t.isDone )
                         }
 
                         return (
