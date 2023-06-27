@@ -8,6 +8,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {addTodoListAC, changeFilterAC, removeTodoListAC, TodoListReducer, updateTodoListAC} from './TodoListReducer';
+import {changeStatusTaskAC, removeTaskAC, TasksReducer, updateTaskAC} from './TaskReducer';
 
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
@@ -47,72 +48,58 @@ export const defTodo: TodoListType[] = [
 
 function App() {
 
-    const [tasks, setTasks] = useState<TaskAssocType>(defTasks)
-    // const [todoList, setTodoList] = useState<TodoListType[]>(defTodo)
+    // const [tasks, setTasks] = useState<TaskAssocType>(defTasks)
+    const [tasks, dispatchTasks] = useReducer(TasksReducer,defTasks)
     const [todoList, dispatchTodoList] = useReducer(TodoListReducer,defTodo)
-
-    // id всегда слева первая
-    const changeStatus = (todoListId: string, taskID: string, isDone: boolean) => {
-        // setTasks(tasks.map(el => el.id === taskID ? {...el, isDone: checkedValue} : el)) // делаем копию через map (массива и всех объектов), ищем id (а можем и не найти, то ничего не возвращает), если нашла - копируем объект (...el). и перезаписываем isDone: checkedValue. Он перезапишется так как старое значение будет совпадать по названию с новым
-
-        setTasks({...tasks, [todoListId]: tasks[todoListId].map(el => el.id === taskID ? {...el, isDone} : el)})
-
-    }
 
     const removeTodoList = (todoListId: string) => {
         dispatchTodoList(removeTodoListAC(todoListId))
-        // setTodoList(todoList.filter(el => el.id !== todoListId))
         delete tasks[todoListId] // удаляем еще таску, так как она уже больше не нужна, так как удалился todoList, а хлам не нужно хранить
     }
 
     // добавление нового тудулиста
     const addTodoList = (newTitle: string) => {
         const todoListId = v1()
-        // const newTodo: TodoListType = {id: todoListId, title: newTitle, filter: 'all'}
-        // setTodoList([...todoList, newTodo])
-        setTasks({...tasks, [todoListId]:[]})
+        // setTasks({...tasks, [todoListId]:[]})
         dispatchTodoList(addTodoListAC(todoListId, newTitle))
     }
 
+    // id всегда слева первая
     const updateTodoList = (todoListId: string, updateTitle: string) => {
         dispatchTodoList(updateTodoListAC(todoListId, updateTitle))
-        // setTodoList(todoList.map(el => el.id === todoListId ? {...el, title: updateTitle} : el))
     }
 
     const changeFilter = (todoListId: string, value:FilterValuesType) => {
-        // setTodoList(todoList.map(el => el.id === todoListId ? {...el, filter: value} : el))
-        // копируем полностью объект и после этого вносим изменения
         dispatchTodoList(changeFilterAC(todoListId, value))
     }
 
-    const updateTask = (todoListId: string, taskId: string, updateTitle: string) => {
-        setTasks({
-            ...tasks,
-            [todoListId]: tasks[todoListId]
-                .map(el => el.id === taskId ? {...el,
-                title: updateTitle} : el)
-        })
-    }
-
     const removeTask = (todoListId: string, taskId: string) => {
-        setTasks({
-            ...tasks,
-            [todoListId]: tasks[todoListId].filter(el => el.id !== taskId)
-        })
+        dispatchTasks(removeTaskAC(todoListId, taskId))
+        // setTasks({
+        //     ...tasks,
+        //     [todoListId]: tasks[todoListId].filter(el => el.id !== taskId)
+        // })
     }
 
-    // Добавление таски
     // через title получаем значение инпута
     const addTask = (todoListId: string, title: string) => {
         let newTask = {id: v1(), title: title, isDone: false}
 
         if(tasks[todoListId]) {
-            setTasks({...tasks, [todoListId]: [newTask, ...tasks[todoListId]]})
+            // setTasks({...tasks, [todoListId]: [newTask, ...tasks[todoListId]]})
         } else {
-            setTasks({...tasks, [todoListId]: [newTask]})
+            // setTasks({...tasks, [todoListId]: [newTask]})
         }
 
         // {...tasks} - копируем весь таск, далее копируем массив тасок по id, в эту копию добавляем новую таску (newTask) и копируем ...tasks[todoListId]
+    }
+
+    const updateTask = (todoListId: string, taskId: string, updateTitle: string) => {
+        dispatchTasks(updateTaskAC(todoListId, taskId, updateTitle))
+    }
+
+    const changeStatus = (todoListId: string, taskID: string, isDone: boolean) => {
+        dispatchTasks(changeStatusTaskAC(todoListId, taskID, isDone))
     }
 
     return (

@@ -13,9 +13,11 @@ export const TodoListReducer = (state: TodoListType[], action: TsarType): TodoLi
             return state.map(el => el.id === action.payload.todoListId ? {...el, title: action.payload.updateTitle} : el)
         }
         case 'CHANGE-FILTER-TODOLIST': {
+            // копируем полностью объект и после этого вносим изменения
             return state.map(el => el.id === action.payload.todoListId ? {...el, filter: action.payload.value} : el)
         }
-        default: return state
+        default:
+            throw new Error('I dont understand this type')
     }
 }
 
