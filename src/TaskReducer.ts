@@ -14,12 +14,12 @@ export const TasksReducer = (state: TaskAssocType, action: tsarType): TaskAssocT
             let newTask = {id: v1(), title: action.payload.title, isDone: false}
 
             if(state[action.payload.todoListId]) {
-                // setTasks({...tasks, [todoListId]: [newTask, ...tasks[todoListId]]})
+                 return {...state, [action.payload.todoListId]: [newTask, ...state[action.payload.todoListId]]}
             } else {
-                // setTasks({...tasks, [todoListId]: [newTask]})
+                 return {...state, [action.payload.todoListId]: [newTask]}
             }
 
-            return state
+            // {...tasks} - копируем весь таск, далее копируем массив тасок по id, в эту копию добавляем новую таску (newTask) и копируем ...tasks[todoListId]
         }
         case 'UPDATE-TASK': {
             return {
@@ -28,7 +28,7 @@ export const TasksReducer = (state: TaskAssocType, action: tsarType): TaskAssocT
                     .map(t => t.id === action.payload.taskId ? {...t,
                         title: action.payload.updateTitle} : t)}
         }
-        case 'CHANGE-STATUS-TASK':
+        case 'CHANGE-STATUS-TASK': {
             // tasks.map(el => el.id === taskID ? {...el, isDone: checkedValue} : el) // делаем копию через map (массива и всех объектов), ищем id (а можем и не найти, то ничего не возвращает), если нашла - копируем объект (...el). и перезаписываем isDone: checkedValue. Он перезапишется так как старое значение будет совпадать по названию с новым
 
             return {...state, [action.payload.todoListId]: state[action.payload.todoListId]

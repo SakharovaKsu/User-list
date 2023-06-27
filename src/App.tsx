@@ -1,4 +1,4 @@
-import React, {useReducer, useState} from 'react';
+import React, {useReducer} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import {v1} from "uuid";
@@ -8,7 +8,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {addTodoListAC, changeFilterAC, removeTodoListAC, TodoListReducer, updateTodoListAC} from './TodoListReducer';
-import {changeStatusTaskAC, removeTaskAC, TasksReducer, updateTaskAC} from './TaskReducer';
+import {addTaskAC, changeStatusTaskAC, removeTaskAC, TasksReducer, updateTaskAC} from './TaskReducer';
 
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
@@ -48,7 +48,6 @@ export const defTodo: TodoListType[] = [
 
 function App() {
 
-    // const [tasks, setTasks] = useState<TaskAssocType>(defTasks)
     const [tasks, dispatchTasks] = useReducer(TasksReducer,defTasks)
     const [todoList, dispatchTodoList] = useReducer(TodoListReducer,defTodo)
 
@@ -60,7 +59,6 @@ function App() {
     // добавление нового тудулиста
     const addTodoList = (newTitle: string) => {
         const todoListId = v1()
-        // setTasks({...tasks, [todoListId]:[]})
         dispatchTodoList(addTodoListAC(todoListId, newTitle))
     }
 
@@ -75,23 +73,12 @@ function App() {
 
     const removeTask = (todoListId: string, taskId: string) => {
         dispatchTasks(removeTaskAC(todoListId, taskId))
-        // setTasks({
-        //     ...tasks,
-        //     [todoListId]: tasks[todoListId].filter(el => el.id !== taskId)
-        // })
     }
 
     // через title получаем значение инпута
     const addTask = (todoListId: string, title: string) => {
-        let newTask = {id: v1(), title: title, isDone: false}
+        dispatchTasks(addTaskAC(todoListId, title))
 
-        if(tasks[todoListId]) {
-            // setTasks({...tasks, [todoListId]: [newTask, ...tasks[todoListId]]})
-        } else {
-            // setTasks({...tasks, [todoListId]: [newTask]})
-        }
-
-        // {...tasks} - копируем весь таск, далее копируем массив тасок по id, в эту копию добавляем новую таску (newTask) и копируем ...tasks[todoListId]
     }
 
     const updateTask = (todoListId: string, taskId: string, updateTitle: string) => {
