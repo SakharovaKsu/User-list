@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import {v1} from "uuid";
@@ -7,15 +7,16 @@ import ButtonAppBar from "./ButtonAppBar";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import {addTodoListAC, changeFilterAC, removeTodoListAC, TodoListReducer, updateTodoListAC} from './TodoListReducer';
 
 
-export type FilterValuesType = 'all' | 'active' | 'completed' // либо то, либо, либо то
-type TodoListType = {
+export type FilterValuesType = 'all' | 'active' | 'completed'
+export type TodoListType = {
     id: string
     title: string
     filter: FilterValuesType
 }
-type TaskAssocType = {
+export type TaskAssocType = {
     [key: string]: TaskType[]
 }
 
@@ -39,7 +40,7 @@ const defTasks = {
 
 // [todoListId1] обернули в скобки, что б получить то, что лежит в переменной, если ставим без кавычек, то этот ключ превратится в стрингу под капотом
 
-const defTodo: TodoListType[] = [
+export const defTodo: TodoListType[] = [
     {id: todoListId1, title: 'What to learn', filter: 'all'},
     {id: todoListId2, title: 'What to buy', filter: 'all'}
 ]
@@ -47,7 +48,8 @@ const defTodo: TodoListType[] = [
 function App() {
 
     const [tasks, setTasks] = useState<TaskAssocType>(defTasks)
-    const [todoList, setTodoList] = useState<TodoListType[]>(defTodo)
+    // const [todoList, setTodoList] = useState<TodoListType[]>(defTodo)
+    const [todoList, dispatchTodoList] = useReducer(TodoListReducer,defTodo)
 
     // id всегда слева первая
     const changeStatus = (todoListId: string, taskID: string, isDone: boolean) => {
@@ -57,13 +59,30 @@ function App() {
 
     }
 
-    const changeFilter = (todoListId: string, value:FilterValuesType) => {
-        setTodoList(todoList.map(el => el.id === todoListId ? {...el, filter: value} : el))
-        // копируем полностью объект и после этого вносим изменения
+    const removeTodoList = (todoListId: string) => {
+        dispatchTodoList(removeTodoListAC(todoListId))
+        // setTodoList(todoList.filter(el => el.id !== todoListId))
+        delete tasks[todoListId] // удаляем еще таску, так как она уже больше не нужна, так как удалился todoList, а хлам не нужно хранить
+    }
+
+    // добавление нового тудулиста
+    const addTodoList = (newTitle: string) => {
+        const todoListId = v1()
+        // const newTodo: TodoListType = {id: todoListId, title: newTitle, filter: 'all'}
+        // setTodoList([...todoList, newTodo])
+        setTasks({...tasks, [todoListId]:[]})
+        dispatchTodoList(addTodoListAC(todoListId, newTitle))
     }
 
     const updateTodoList = (todoListId: string, updateTitle: string) => {
-        setTodoList(todoList.map(el => el.id === todoListId ? {...el, title: updateTitle} : el))
+        dispatchTodoList(updateTodoListAC(todoListId, updateTitle))
+        // setTodoList(todoList.map(el => el.id === todoListId ? {...el, title: updateTitle} : el))
+    }
+
+    const changeFilter = (todoListId: string, value:FilterValuesType) => {
+        // setTodoList(todoList.map(el => el.id === todoListId ? {...el, filter: value} : el))
+        // копируем полностью объект и после этого вносим изменения
+        dispatchTodoList(changeFilterAC(todoListId, value))
     }
 
     const updateTask = (todoListId: string, taskId: string, updateTitle: string) => {
@@ -94,19 +113,6 @@ function App() {
         }
 
         // {...tasks} - копируем весь таск, далее копируем массив тасок по id, в эту копию добавляем новую таску (newTask) и копируем ...tasks[todoListId]
-    }
-
-    const removeTodoList = (todoListId: string) => {
-    setTodoList(todoList.filter(el => el.id !== todoListId))
-        delete tasks[todoListId] // удаляем еще таску, так как она уже больше не нужна, так как удалился todoList, а хлам не нужно хранить
-    }
-
-    // добавление нового тудулиста
-    const addTodoList = (newTitle: string) => {
-        const todoListId = v1()
-        const newTodo: TodoListType = {id: todoListId, title: newTitle, filter: 'all'}
-        setTodoList([...todoList, newTodo])
-        setTasks({...tasks, [todoListId]:[]})
     }
 
     return (
