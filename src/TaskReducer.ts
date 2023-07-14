@@ -1,5 +1,6 @@
 import {TaskAssocType} from './App';
 import {v1} from 'uuid';
+import {AddTodoListType} from './TodoListReducer';
 
 export const TasksReducer = (state: TaskAssocType, action: tsarType): TaskAssocType => {
     switch (action.type) {
@@ -34,6 +35,9 @@ export const TasksReducer = (state: TaskAssocType, action: tsarType): TaskAssocT
             return {...state, [action.payload.todoListId]: state[action.payload.todoListId]
                     .map(t => t.id === action.payload.taskID ? {...t, isDone: action.payload.isDone} : t)}
         }
+        case 'ADD-TODOLIST': {
+            return {...state, [action.payload.todoListId] : []}
+        }
         default:
             throw new Error('I dont understand this type')
     }
@@ -44,7 +48,7 @@ type AddTasksType = ReturnType<typeof addTaskAC>
 type UpdateTaskType = ReturnType<typeof updateTaskAC>
 type ChangeStatusTaskType = ReturnType<typeof changeStatusTaskAC>
 
-type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | ChangeStatusTaskType
+type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | ChangeStatusTaskType | AddTodoListType
 
 export const removeTaskAC = (todoListId: string, taskId: string) => {
     return {

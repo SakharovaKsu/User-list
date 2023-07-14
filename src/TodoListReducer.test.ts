@@ -24,14 +24,13 @@ test ('correct todolist should be removed', () => {
 test ('correct todolist must be added', () => {
     const todoListId1 = v1()
     const todoListId2 = v1()
-    const todoListId3 = v1()
 
     const defTodo: TodoListType[] = [
         {id: todoListId1, title: 'What to learn', filter: 'all'},
         {id: todoListId2, title: 'What to buy', filter: 'all'}
     ]
 
-    const action = addTodoListAC(todoListId3, 'List of books')
+    const action = addTodoListAC('List of books')
     const endState = TodoListReducer(defTodo, action)
 
     expect(endState.length).toBe(3)

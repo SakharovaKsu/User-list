@@ -58,8 +58,8 @@ function App() {
 
     // добавление нового тудулиста
     const addTodoList = (newTitle: string) => {
-        const todoListId = v1()
-        dispatchTodoList(addTodoListAC(todoListId, newTitle))
+        // const todoListId = v1()
+        dispatchTodoList(addTodoListAC(newTitle))
     }
 
     // id всегда слева первая
