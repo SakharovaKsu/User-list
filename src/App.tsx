@@ -53,7 +53,6 @@ function App() {
 
     const removeTodoList = (todoListId: string) => {
         dispatchTodoList(removeTodoListAC(todoListId))
-        delete tasks[todoListId] // удаляем еще таску, так как она уже больше не нужна, так как удалился todoList, а хлам не нужно хранить
     }
 
     // добавление нового тудулиста

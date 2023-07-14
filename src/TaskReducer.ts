@@ -1,6 +1,6 @@
 import {TaskAssocType} from './App';
 import {v1} from 'uuid';
-import {AddTodoListType} from './TodoListReducer';
+import {AddTodoListType, RemoveTodoListType} from './TodoListReducer';
 
 export const TasksReducer = (state: TaskAssocType, action: tsarType): TaskAssocType => {
     switch (action.type) {
@@ -38,6 +38,12 @@ export const TasksReducer = (state: TaskAssocType, action: tsarType): TaskAssocT
         case 'ADD-TODOLIST': {
             return {...state, [action.payload.todoListId] : []}
         }
+        case 'REMOVE-TODOLIST': {
+            // копируем, что б не нарушать принцип иммутабельности и удаляем стайт
+            let stateCopy = {...state}
+            delete stateCopy[action.payload.todoListId]
+            return stateCopy
+        }
         default:
             throw new Error('I dont understand this type')
     }
@@ -48,7 +54,7 @@ type AddTasksType = ReturnType<typeof addTaskAC>
 type UpdateTaskType = ReturnType<typeof updateTaskAC>
 type ChangeStatusTaskType = ReturnType<typeof changeStatusTaskAC>
 
-type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | ChangeStatusTaskType | AddTodoListType
+type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | ChangeStatusTaskType | AddTodoListType | RemoveTodoListType
 
 export const removeTaskAC = (todoListId: string, taskId: string) => {
     return {
