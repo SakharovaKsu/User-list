@@ -3,8 +3,10 @@ import {addTaskAC, changeStatusTaskAC, removeTaskAC, TasksReducer, updateTaskAC}
 import {TaskAssocType} from './App';
 import {addTodoListAC} from './TodoListReducer';
 
-test ('removing a task from the list', () => {
-    const defTasks: TaskAssocType = {
+let defTasks: TaskAssocType
+
+beforeEach(() => {
+    defTasks = {
         'todolistId1': [
             {id: v1(), title: 'HTML&CSS', isDone: true},
             {id: v1(), title: 'JS', isDone: true},
@@ -18,6 +20,9 @@ test ('removing a task from the list', () => {
             {id: v1(), title: 'TS', isDone: false}
         ]
     }
+})
+
+test ('removing a task from the list', () => {
 
     const taskID = defTasks['todolistId1'][0].id
 
@@ -29,21 +34,6 @@ test ('removing a task from the list', () => {
 })
 
 test ('there should be a new task', () => {
-
-    const defTasks: TaskAssocType = {
-        'todolistId1': [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'React', isDone: false},
-            {id: v1(), title: 'TS', isDone: false}
-        ],
-        'todolistId2': [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'React', isDone: false},
-            {id: v1(), title: 'TS', isDone: false}
-        ]
-    }
 
     const taskTitle = 'Vue'
 
@@ -59,21 +49,6 @@ test ('there should be a new task', () => {
 
 test ('should change the title in the task', () => {
 
-    const defTasks: TaskAssocType = {
-        'todolistId1': [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'React', isDone: false},
-            {id: v1(), title: 'TS', isDone: false}
-        ],
-        'todolistId2': [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'React', isDone: false},
-            {id: v1(), title: 'TS', isDone: false}
-        ]
-    }
-
     const taskID = defTasks['todolistId1'][0].id
 
     const action = updateTaskAC('todolistId1', taskID, 'CSS')
@@ -84,20 +59,6 @@ test ('should change the title in the task', () => {
 })
 
 test ('should change the status in tasks', () => {
-    const defTasks: TaskAssocType = {
-        'todolistId1': [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'React', isDone: false},
-            {id: v1(), title: 'TS', isDone: false}
-        ],
-        'todolistId2': [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'React', isDone: false},
-            {id: v1(), title: 'TS', isDone: false}
-        ]
-    }
 
     const taskID = defTasks['todolistId1'][0].id
 
@@ -109,22 +70,10 @@ test ('should change the status in tasks', () => {
 })
 
 test('new array should be added when new todolist is added', () => {
-    const startState: TaskAssocType = {
-        'todolistId1': [
-            {id: '1', title: 'CSS', isDone: false},
-            {id: '2', title: 'JS', isDone: true},
-            {id: '3', title: 'React', isDone: false}
-        ],
-        'todolistId2': [
-            {id: '1', title: 'bread', isDone: false},
-            {id: '2', title: 'milk', isDone: true},
-            {id: '3', title: 'tea', isDone: false}
-        ]
-    }
 
     const action = addTodoListAC('new todolist')
 
-    const endState = TasksReducer(startState, action)
+    const endState = TasksReducer(defTasks, action)
 
 
     const keys = Object.keys(endState)

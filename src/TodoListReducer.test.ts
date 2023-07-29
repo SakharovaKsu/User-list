@@ -1,12 +1,16 @@
 import {addTodoListAC, changeFilterAC, removeTodoListAC, TodoListReducer, updateTodoListAC} from './TodoListReducer';
 import {FilterValuesType, TodoListType} from './App';
 
-test ('correct todolist should be removed', () => {
+let defTodo: TodoListType[]
 
-    const defTodo: TodoListType[] = [
+beforeEach(() => {
+    defTodo = [
         {id: 'todolistId1', title: 'What to learn', filter: 'all'},
         {id: 'todolistId2', title: 'What to buy', filter: 'all'}
     ]
+})
+
+test ('correct todolist should be removed', () => {
 
     const action = removeTodoListAC('todolistId1')
     const endState = TodoListReducer(defTodo, action)
@@ -20,11 +24,6 @@ test ('correct todolist should be removed', () => {
 
 test ('correct todolist must be added', () => {
 
-    const defTodo: TodoListType[] = [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all'},
-        {id: 'todolistId2', title: 'What to buy', filter: 'all'}
-    ]
-
     const action = addTodoListAC('List of books')
     const endState = TodoListReducer(defTodo, action)
 
@@ -33,11 +32,6 @@ test ('correct todolist must be added', () => {
 })
 
 test ('the title of the to-do list should be updated', () => {
-
-    const defTodo: TodoListType[] = [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all'},
-        {id: 'todolistId2', title: 'What to buy', filter: 'all'}
-    ]
 
     const newTodoListTitle = 'List of books'
 
@@ -48,11 +42,6 @@ test ('the title of the to-do list should be updated', () => {
 })
 
 test ('The filter in the right-hand list should change', () => {
-
-    const defTodo: TodoListType[] = [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all'},
-        {id: 'todolistId2', title: 'What to buy', filter: 'all'}
-    ]
 
     const newTodoListFilter: FilterValuesType = 'completed'
 
