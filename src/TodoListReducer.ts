@@ -1,7 +1,10 @@
 import {FilterValuesType, TodoListType} from './App';
 import {v1} from 'uuid';
 
-export const TodoListReducer = (state: TodoListType[], action: TsarType): TodoListType[] => {
+// С первым системным экшеном, который редакс диспатчит\отправляет в наши редьюсеры стейт не приходит. Он равен undefined, его нет, потому что жизнь только зарождается, поэтому пишем для state значение по умолчанию
+const initialState:TodoListType[] = []
+
+export const TodoListReducer = (state = initialState, action: TsarType): TodoListType[] => {
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
             return state.filter(el => el.id !== action.payload.todoListId)
@@ -18,7 +21,7 @@ export const TodoListReducer = (state: TodoListType[], action: TsarType): TodoLi
             return state.map(el => el.id === action.payload.todoListId ? {...el, filter: action.payload.value} : el)
         }
         default:
-            throw new Error('I dont understand this type')
+            return state
     }
 }
 

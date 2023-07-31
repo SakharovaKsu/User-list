@@ -1,4 +1,4 @@
-import {combineReducers, createStore} from 'redux';
+import {combineReducers, legacy_createStore} from 'redux';
 import {TodoListReducer} from './TodoListReducer';
 import {TasksReducer} from './TaskReducer';
 
@@ -6,11 +6,11 @@ import {TasksReducer} from './TaskReducer';
 // мы задаём структуру нашего единственного объекта-состояния
 const rootReducer = combineReducers({
     todoList: TodoListReducer,
-    task: TasksReducer
+    tasks: TasksReducer
 })
 
 // непосредственно создаём store
-export const store = createStore(rootReducer)
+export const store = legacy_createStore(rootReducer)
 
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>

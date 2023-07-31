@@ -9,6 +9,8 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {addTodoListAC, changeFilterAC, removeTodoListAC, TodoListReducer, updateTodoListAC} from './TodoListReducer';
 import {addTaskAC, changeStatusTaskAC, removeTaskAC, TasksReducer, updateTaskAC} from './TaskReducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootStateType} from './store';
 
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
@@ -21,71 +23,49 @@ export type TaskAssocType = {
     [key: string]: TaskType[]
 }
 
-const todoListId1 = v1()
-const todoListId2 = v1()
-
-const defTasks = {
-    [todoListId1]: [
-        {id: v1(), title: 'HTML&CSS', isDone: true},
-        {id: v1(), title: 'JS', isDone: true},
-        {id: v1(), title: 'React', isDone: false},
-        {id: v1(), title: 'TS', isDone: false}
-    ],
-    [todoListId2]: [
-        {id: v1(), title: 'HTML&CSS', isDone: true},
-        {id: v1(), title: 'JS', isDone: true},
-        {id: v1(), title: 'React', isDone: false},
-        {id: v1(), title: 'TS', isDone: false}
-    ]
-}
-
-// [todoListId1] обернули в скобки, что б получить то, что лежит в переменной, если ставим без кавычек, то этот ключ превратится в стрингу под капотом
-
-export const defTodo: TodoListType[] = [
-    {id: todoListId1, title: 'What to learn', filter: 'all'},
-    {id: todoListId2, title: 'What to buy', filter: 'all'}
-]
-
 function AppWithRedux() {
 
-    const [tasks, dispatchTasks] = useReducer(TasksReducer,defTasks)
-    const [todoList, dispatchTodoList] = useReducer(TodoListReducer,defTodo)
+    // беремен данные из store
+    const todoList = useSelector<AppRootStateType, TodoListType[]>(state => state.todoList)
+    const tasks = useSelector<AppRootStateType, TaskAssocType>(state => state.tasks)
+
+    // Получаем функцию dispatch из Redux store. Функция dispatch используется для отправки действий (actions)
+    const dispatch = useDispatch()
 
     const removeTodoList = (todoListId: string) => {
-        dispatchTodoList(removeTodoListAC(todoListId))
+        dispatch(removeTodoListAC(todoListId))
     }
 
     // добавление нового тудулиста
     const addTodoList = (newTitle: string) => {
-        // const todoListId = v1()
-        dispatchTodoList(addTodoListAC(newTitle))
+        dispatch(addTodoListAC(newTitle))
     }
 
     // id всегда слева первая
     const updateTodoList = (todoListId: string, updateTitle: string) => {
-        dispatchTodoList(updateTodoListAC(todoListId, updateTitle))
+        dispatch(updateTodoListAC(todoListId, updateTitle))
     }
 
     const changeFilter = (todoListId: string, value:FilterValuesType) => {
-        dispatchTodoList(changeFilterAC(todoListId, value))
+        dispatch(changeFilterAC(todoListId, value))
     }
 
     const removeTask = (todoListId: string, taskId: string) => {
-        dispatchTasks(removeTaskAC(todoListId, taskId))
+        dispatch(removeTaskAC(todoListId, taskId))
     }
 
     // через title получаем значение инпута
     const addTask = (todoListId: string, title: string) => {
-        dispatchTasks(addTaskAC(todoListId, title))
+        dispatch(addTaskAC(todoListId, title))
 
     }
 
     const updateTask = (todoListId: string, taskId: string, updateTitle: string) => {
-        dispatchTasks(updateTaskAC(todoListId, taskId, updateTitle))
+        dispatch(updateTaskAC(todoListId, taskId, updateTitle))
     }
 
     const changeStatus = (todoListId: string, taskID: string, isDone: boolean) => {
-        dispatchTasks(changeStatusTaskAC(todoListId, taskID, isDone))
+        dispatch(changeStatusTaskAC(todoListId, taskID, isDone))
     }
 
     return (

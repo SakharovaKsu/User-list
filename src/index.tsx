@@ -2,15 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import AppWithRedux from './AppWithRedux';
+import {Provider} from 'react-redux';
+import {store} from './store';
 
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+// Даём доступ компонентам к store, используя Provider
+
 root.render(
-  <React.StrictMode>
-    <AppWithRedux />
-  </React.StrictMode>
+    <React.StrictMode>
+        <Provider store={store}>
+            <AppWithRedux />
+        </Provider>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

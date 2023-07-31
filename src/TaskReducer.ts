@@ -2,7 +2,9 @@ import {TaskAssocType} from './App';
 import {v1} from 'uuid';
 import {AddTodoListType, RemoveTodoListType} from './TodoListReducer';
 
-export const TasksReducer = (state: TaskAssocType, action: tsarType): TaskAssocType => {
+const initialState: TaskAssocType = {}
+
+export const TasksReducer = (state = initialState, action: tsarType): TaskAssocType => {
     switch (action.type) {
         case 'REMOVE-TASK': {
             return {
@@ -45,7 +47,7 @@ export const TasksReducer = (state: TaskAssocType, action: tsarType): TaskAssocT
             return stateCopy
         }
         default:
-            throw new Error('I dont understand this type')
+            return state
     }
 }
 
