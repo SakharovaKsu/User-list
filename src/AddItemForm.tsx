@@ -1,6 +1,7 @@
 import React, {ChangeEvent, FC, KeyboardEvent, memo, useState} from 'react';
 import Button from "@mui/material/Button";
 import TextField from '@mui/material/TextField';
+import s from './TodoList.module.css';
 
 type AddItemFormType = {
     callback: (title: string) => void
@@ -34,9 +35,7 @@ export const AddItemForm:FC<AddItemFormType> = memo( ({callback,}) => {
     const onKeyPressHandler = (e:KeyboardEvent<HTMLInputElement>) => {
         // Мы на каждое впечатывание символа вызываем setError(null), и это путает React.
         // Поэтому делаем setError(null) только, если текущая error !== null
-        if(error !== null) {
-            setError(null)
-        }
+        if(error) setError(null)
 
         if(e.key === 'Enter') newTask()
     }
@@ -46,6 +45,7 @@ export const AddItemForm:FC<AddItemFormType> = memo( ({callback,}) => {
         maxHeight: '40px',
         minWidth: '40px',
         minHeight: '40px',
+        marginLeft: '10px'
     }
 
     return (

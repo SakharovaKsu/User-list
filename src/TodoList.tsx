@@ -86,7 +86,7 @@ const TodoList: FC<TodoListPropsType> = memo(({
     }
 
     return (
-        <div className="todoList">
+        <div>
             <div>
                 <h3 className={s.title}>
                     <EditableSpan oldTitle={todoListTitle} callback={updateTodoListHandler}/>
@@ -96,7 +96,7 @@ const TodoList: FC<TodoListPropsType> = memo(({
                 </h3>
                 <AddItemForm callback={addTaskHandler}/>
                 <div>{tasksJSX}</div>
-                <div>
+                <div className={s.button}>
                     <Button variant={filter === 'all' ? 'contained' : 'outlined'}
                             color="success"
                             onClick={() => tsarHandler('all')}

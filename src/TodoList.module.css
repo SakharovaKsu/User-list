@@ -6,12 +6,6 @@
     color: red;
 }
 
-.allFilter {
-    color: #002349;
-    background-color: aqua;
-    border: 1px solid #002349;
-}
-
 .isDone {
     opacity: 0.6;
 }
@@ -19,4 +13,10 @@
 .title {
     margin: 0;
     padding-bottom: 5px;
+}
+
+.button {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
 }
