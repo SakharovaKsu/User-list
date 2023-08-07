@@ -1,14 +1,13 @@
-import React, {useReducer} from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
-import {v1} from "uuid";
 import AddItemForm from "./AddItemForm";
 import ButtonAppBar from "./ButtonAppBar";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {addTodoListAC, changeFilterAC, removeTodoListAC, TodoListReducer, updateTodoListAC} from './TodoListReducer';
-import {addTaskAC, changeStatusTaskAC, removeTaskAC, TasksReducer, updateTaskAC} from './TaskReducer';
+import {addTodoListAC, changeFilterAC, removeTodoListAC, updateTodoListAC} from './TodoListReducer';
+import {addTaskAC, changeStatusTaskAC, removeTaskAC, updateTaskAC} from './TaskReducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './store';
 
@@ -32,41 +31,40 @@ function AppWithRedux() {
     // Получаем функцию dispatch из Redux store. Функция dispatch используется для отправки действий (actions)
     const dispatch = useDispatch()
 
-    const removeTodoList = (todoListId: string) => {
+    const removeTodoList =  useCallback((todoListId: string) => {
         dispatch(removeTodoListAC(todoListId))
-    }
+    }, [])
 
     // добавление нового тудулиста
-    const addTodoList = (newTitle: string) => {
+    const addTodoList = useCallback((newTitle: string) => {
         dispatch(addTodoListAC(newTitle))
-    }
+    }, [])
 
     // id всегда слева первая
-    const updateTodoList = (todoListId: string, updateTitle: string) => {
+    const updateTodoList =  useCallback((todoListId: string, updateTitle: string) => {
         dispatch(updateTodoListAC(todoListId, updateTitle))
-    }
+    }, [])
 
-    const changeFilter = (todoListId: string, value:FilterValuesType) => {
+    const changeFilter =  useCallback((todoListId: string, value:FilterValuesType) => {
         dispatch(changeFilterAC(todoListId, value))
-    }
+    }, [])
 
-    const removeTask = (todoListId: string, taskId: string) => {
+    const removeTask =  useCallback((todoListId: string, taskId: string) => {
         dispatch(removeTaskAC(todoListId, taskId))
-    }
+    }, [])
 
     // через title получаем значение инпута
-    const addTask = (todoListId: string, title: string) => {
+    const addTask =  useCallback((todoListId: string, title: string) => {
         dispatch(addTaskAC(todoListId, title))
+    }, [])
 
-    }
-
-    const updateTask = (todoListId: string, taskId: string, updateTitle: string) => {
+    const updateTask = useCallback((todoListId: string, taskId: string, updateTitle: string) => {
         dispatch(updateTaskAC(todoListId, taskId, updateTitle))
-    }
+    }, [])
 
-    const changeStatus = (todoListId: string, taskID: string, isDone: boolean) => {
+    const changeStatus = useCallback((todoListId: string, taskID: string, isDone: boolean) => {
         dispatch(changeStatusTaskAC(todoListId, taskID, isDone))
-    }
+    }, [])
 
     return (
         <div className="App">

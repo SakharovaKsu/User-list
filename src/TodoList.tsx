@@ -1,4 +1,4 @@
-import React, {FC, useState, ChangeEvent} from 'react';
+import React, {FC, ChangeEvent, useCallback, memo} from 'react';
 import {FilterValuesType} from "./App";
 import s from './TodoList.module.css';
 import AddItemForm from "./AddItemForm";
@@ -28,7 +28,7 @@ export type TaskType = {
     isDone: boolean
 }
 
-const TodoList: FC<TodoListPropsType> = ({
+const TodoList: FC<TodoListPropsType> = memo(({
     todoListId,
     todoListTitle,
     tasks,
@@ -41,9 +41,11 @@ const TodoList: FC<TodoListPropsType> = ({
     updateTask,
     updateTodoList}) => {
 
-    const addTaskHandler = (title: string) => {
+    console.log('Todolist')
+
+    const addTaskHandler = useCallback((title: string) => {
         addTask(todoListId, title)
-    }
+    }, [])
 
     const removeTodoListHandler = () => {
         removeTodoList(todoListId);
@@ -83,7 +85,6 @@ const TodoList: FC<TodoListPropsType> = ({
         changeFilter(todoListId, value)
     }
 
-
     return (
         <div className="todoList">
             <div>
@@ -112,6 +113,6 @@ const TodoList: FC<TodoListPropsType> = ({
             </div>
         </div>
     );
-}
+})
 
 export default TodoList;
