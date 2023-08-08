@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
+import {ButtonWithMemo} from './ButtonWithMemo';
 
 type TodoListPropsType = {
     todoListTitle: string
@@ -89,9 +90,9 @@ const TodoList: FC<TodoListPropsType> = memo(({
     })
 
     // фильтрация при клике
-    const tsarHandler = (value: FilterValuesType) => {
+    const tsarHandler = useCallback((value: FilterValuesType) => {
         changeFilter(todoListId, value)
-    }
+    }, [changeFilter, todoListId])
 
     return (
         <div>
@@ -105,18 +106,9 @@ const TodoList: FC<TodoListPropsType> = memo(({
                 <AddItemForm callback={addTaskHandler}/>
                 <div>{tasksJSX}</div>
                 <div className={s.button}>
-                    <Button variant={filter === 'all' ? 'contained' : 'outlined'}
-                            color="success"
-                            onClick={() => tsarHandler('all')}
-                    >All</Button>
-                    <Button variant={filter === 'active' ? 'contained' : 'outlined'}
-                            color="success"
-                            onClick={() => tsarHandler('active')}
-                    >Active</Button>
-                    <Button variant={filter === 'completed' ? 'contained' : 'outlined'}
-                            color="success"
-                            onClick={() => tsarHandler('completed')}
-                    >Completed</Button>
+                    <ButtonWithMemo title={'All'} variant={filter === 'all' ? 'contained' : 'outlined'} color={'success'} onClick={() => tsarHandler('all')}/>
+                    <ButtonWithMemo title={'Active'} variant={filter === 'active' ? 'contained' : 'outlined'} color={'success'} onClick={() => tsarHandler('active')}/>
+                    <ButtonWithMemo title={'Completed'} variant={filter === 'completed' ? 'contained' : 'outlined'} color={'success'} onClick={() => tsarHandler('completed')}/>
                 </div>
             </div>
         </div>
