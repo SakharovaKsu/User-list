@@ -1,8 +1,8 @@
 import React, {useCallback} from 'react';
 import './App.css';
-import TodoList, {TaskType} from "./TodoList";
-import AddItemForm from "./AddItemForm";
-import ButtonAppBar from "./ButtonAppBar";
+import TodoList, {TaskType} from './TodoList';
+import AddItemForm from './AddItemForm';
+import ButtonAppBar from './ButtonAppBar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -24,7 +24,7 @@ export type TaskAssocType = {
 
 function AppWithRedux() {
 
-    // беремен данные из store
+    // берем данные из store
     const todoList = useSelector<AppRootStateType, TodoListType[]>(state => state.todoList)
     const tasks = useSelector<AppRootStateType, TaskAssocType>(state => state.tasks)
 

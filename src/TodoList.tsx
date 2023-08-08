@@ -1,13 +1,12 @@
-import React, {FC, ChangeEvent, useCallback, memo} from 'react';
-import {FilterValuesType} from "./App";
+import React, {FC, useCallback, memo} from 'react';
+import {FilterValuesType} from './App';
 import s from './TodoList.module.css';
-import AddItemForm from "./AddItemForm";
-import EditableSpan from "./EditableSpan";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
+import AddItemForm from './AddItemForm';
+import EditableSpan from './EditableSpan';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {ButtonWithMemo} from './ButtonWithMemo';
+import {Task} from './Task';
 
 type TodoListPropsType = {
     todoListTitle: string
@@ -42,8 +41,6 @@ const TodoList: FC<TodoListPropsType> = memo(({
     updateTask,
     updateTodoList}) => {
 
-    console.log('Todolist')
-
     const addTaskHandler = useCallback((title: string) => {
         addTask(todoListId, title)
     }, [addTask, todoListId])
@@ -56,9 +53,15 @@ const TodoList: FC<TodoListPropsType> = memo(({
         updateTodoList(todoListId, updateTitle)
     }
 
-    const updateTaskHandler = (tID: string, updateTitle: string) => {
+    const updateTaskHandler = useCallback((tID: string, updateTitle: string) => {
         updateTask(todoListId, tID, updateTitle)
-    }
+    }, [updateTask])
+
+    const removeTaskHandler = useCallback((taskId: string) => removeTask(todoListId, taskId), [removeTask])
+
+    const changeStatusTask = useCallback((taskId: string,  isDone: boolean) => {
+        changeStatus(todoListId, taskId, isDone)
+    }, [changeStatus])
 
     if(filter === 'active') {
         tasks = tasks.filter(t => !t.isDone )
@@ -68,31 +71,17 @@ const TodoList: FC<TodoListPropsType> = memo(({
         tasks = tasks.filter(t => t.isDone )
     }
 
-    //  Лишка
-    const tasksJSX:Array<JSX.Element> = tasks?.map((t) => {
-        const onClickHandler = () => {
-            removeTask(todoListId, t.id)
-        }
-
-        const changeStatusHandler = (e:ChangeEvent<HTMLInputElement>) => {
-            changeStatus(todoListId, t.id, e.currentTarget.checked)
-        }
-
-        return (
-            <div className={t.isDone ? s.isDone : ''} key={t.id}>
-                <Checkbox checked={t.isDone} color="success" onChange={changeStatusHandler}/>
-                <EditableSpan oldTitle={t.title} callback={(updateTitle) => updateTaskHandler(t.id, updateTitle)}/>
-                <IconButton aria-label="delete" color="success" onClick={onClickHandler}>
-                    <DeleteIcon />
-                </IconButton>
-            </div>
-        )
-    })
-
     // фильтрация при клике
     const tsarHandler = useCallback((value: FilterValuesType) => {
         changeFilter(todoListId, value)
     }, [changeFilter, todoListId])
+
+    //  Лишка
+    const tasksJSX:Array<JSX.Element> = tasks?.map((t) => {
+        return (
+            <Task key={t.id} task={t} removeTask={removeTaskHandler} changeStatus={changeStatusTask} updateTaskHandler={updateTaskHandler}/>
+        )
+    })
 
     return (
         <div>
@@ -106,9 +95,21 @@ const TodoList: FC<TodoListPropsType> = memo(({
                 <AddItemForm callback={addTaskHandler}/>
                 <div>{tasksJSX}</div>
                 <div className={s.button}>
-                    <ButtonWithMemo title={'All'} variant={filter === 'all' ? 'contained' : 'outlined'} color={'success'} onClick={() => tsarHandler('all')}/>
-                    <ButtonWithMemo title={'Active'} variant={filter === 'active' ? 'contained' : 'outlined'} color={'success'} onClick={() => tsarHandler('active')}/>
-                    <ButtonWithMemo title={'Completed'} variant={filter === 'completed' ? 'contained' : 'outlined'} color={'success'} onClick={() => tsarHandler('completed')}/>
+                    <ButtonWithMemo title={'All'}
+                                    variant={filter === 'all' ? 'contained' : 'outlined'}
+                                    color={'success'}
+                                    onClick={() => tsarHandler('all')}
+                    />
+                    <ButtonWithMemo title={'Active'}
+                                    variant={filter === 'active' ? 'contained' : 'outlined'}
+                                    color={'success'}
+                                    onClick={() => tsarHandler('active')}
+                    />
+                    <ButtonWithMemo title={'Completed'}
+                                    variant={filter === 'completed' ? 'contained' : 'outlined'}
+                                    color={'success'}
+                                    onClick={() => tsarHandler('completed')}
+                    />
                 </div>
             </div>
         </div>
