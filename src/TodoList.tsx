@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {ButtonWithMemo} from './ButtonWithMemo';
 import {Task} from './Task';
+import {TaskWithRedux} from './TaskWithRedux';
 
 type TodoListPropsType = {
     todoListTitle: string
@@ -53,15 +54,15 @@ const TodoList: FC<TodoListPropsType> = memo(({
         updateTodoList(todoListId, updateTitle)
     }
 
-    const updateTaskHandler = useCallback((tID: string, updateTitle: string) => {
-        updateTask(todoListId, tID, updateTitle)
-    }, [updateTask])
-
-    const removeTaskHandler = useCallback((taskId: string) => removeTask(todoListId, taskId), [removeTask])
-
-    const changeStatusTask = useCallback((taskId: string,  isDone: boolean) => {
-        changeStatus(todoListId, taskId, isDone)
-    }, [changeStatus])
+    // const updateTaskHandler = useCallback((tID: string, updateTitle: string) => {
+    //     updateTask(todoListId, tID, updateTitle)
+    // }, [updateTask])
+    //
+    // const removeTaskHandler = useCallback((taskId: string) => removeTask(todoListId, taskId), [removeTask])
+    //
+    // const changeStatusTask = useCallback((taskId: string,  isDone: boolean) => {
+    //     changeStatus(todoListId, taskId, isDone)
+    // }, [changeStatus])
 
     if(filter === 'active') {
         tasks = tasks.filter(t => !t.isDone )
@@ -79,7 +80,8 @@ const TodoList: FC<TodoListPropsType> = memo(({
     //  Лишка
     const tasksJSX:Array<JSX.Element> = tasks?.map((t) => {
         return (
-            <Task key={t.id} task={t} removeTask={removeTaskHandler} changeStatus={changeStatusTask} updateTaskHandler={updateTaskHandler}/>
+            // <Task key={t.id} task={t} removeTask={removeTaskHandler} changeStatus={changeStatusTask} updateTaskHandler={updateTaskHandler}/>
+            <TaskWithRedux key={t.id} task={t} todolistId={todoListId}/>
         )
     })
 
