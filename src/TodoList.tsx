@@ -45,7 +45,7 @@ const TodoList: FC<TodoListPropsType> = memo(({
 
     const addTaskHandler = useCallback((title: string) => {
         addTask(todoListId, title)
-    }, [])
+    }, [addTask, todoListId])
 
     const removeTodoListHandler = () => {
         removeTodoList(todoListId);
@@ -57,6 +57,14 @@ const TodoList: FC<TodoListPropsType> = memo(({
 
     const updateTaskHandler = (tID: string, updateTitle: string) => {
         updateTask(todoListId, tID, updateTitle)
+    }
+
+    if(filter === 'active') {
+        tasks = tasks.filter(t => !t.isDone )
+    }
+
+    if(filter === 'completed') {
+        tasks = tasks.filter(t => t.isDone )
     }
 
     //  Лишка

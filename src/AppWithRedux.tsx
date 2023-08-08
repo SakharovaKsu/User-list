@@ -33,38 +33,38 @@ function AppWithRedux() {
 
     const removeTodoList =  useCallback((todoListId: string) => {
         dispatch(removeTodoListAC(todoListId))
-    }, [])
+    }, [dispatch])
 
     // добавление нового тудулиста
     const addTodoList = useCallback((newTitle: string) => {
         dispatch(addTodoListAC(newTitle))
-    }, [])
+    }, [dispatch])
 
     // id всегда слева первая
     const updateTodoList =  useCallback((todoListId: string, updateTitle: string) => {
         dispatch(updateTodoListAC(todoListId, updateTitle))
-    }, [])
+    }, [dispatch])
 
     const changeFilter =  useCallback((todoListId: string, value:FilterValuesType) => {
         dispatch(changeFilterAC(todoListId, value))
-    }, [])
+    }, [dispatch])
 
     const removeTask =  useCallback((todoListId: string, taskId: string) => {
         dispatch(removeTaskAC(todoListId, taskId))
-    }, [])
+    }, [dispatch])
 
     // через title получаем значение инпута
     const addTask =  useCallback((todoListId: string, title: string) => {
         dispatch(addTaskAC(todoListId, title))
-    }, [])
+    }, [dispatch])
 
     const updateTask = useCallback((todoListId: string, taskId: string, updateTitle: string) => {
         dispatch(updateTaskAC(todoListId, taskId, updateTitle))
-    }, [])
+    }, [dispatch])
 
     const changeStatus = useCallback((todoListId: string, taskID: string, isDone: boolean) => {
         dispatch(changeStatusTaskAC(todoListId, taskID, isDone))
-    }, [])
+    }, [dispatch])
 
     return (
         <div className="App">
@@ -76,16 +76,16 @@ function AppWithRedux() {
                 </Grid>
                 <Grid container spacing={3}>
                     {todoList.map(tl => {
-
-                        let tasksForTodoList = tasks[tl.id]
-
-                        if(tl.filter === 'active') {
-                            tasksForTodoList = tasks[tl.id].filter(t => !t.isDone )
-                        }
-
-                        if(tl.filter === 'completed') {
-                            tasksForTodoList = tasks[tl.id].filter(t => t.isDone )
-                        }
+                        //
+                        // let tasksForTodoList = tasks[tl.id]
+                        //
+                        // if(tl.filter === 'active') {
+                        //     tasksForTodoList = tasks[tl.id].filter(t => !t.isDone )
+                        // }
+                        //
+                        // if(tl.filter === 'completed') {
+                        //     tasksForTodoList = tasks[tl.id].filter(t => t.isDone )
+                        // }
 
                         return (
                             <Grid item>
@@ -95,7 +95,7 @@ function AppWithRedux() {
                                         updateTask={updateTask}
                                         updateTodoList={updateTodoList}
                                         todoListId={tl.id}
-                                        tasks={tasksForTodoList}
+                                        tasks={tasks[tl.id]}
                                         todoListTitle={tl.title}
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}

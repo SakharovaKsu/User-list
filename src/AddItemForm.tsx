@@ -1,14 +1,12 @@
 import React, {ChangeEvent, FC, KeyboardEvent, memo, useState} from 'react';
 import Button from "@mui/material/Button";
 import TextField from '@mui/material/TextField';
-import s from './TodoList.module.css';
 
 type AddItemFormType = {
     callback: (title: string) => void
 }
 
 export const AddItemForm:FC<AddItemFormType> = memo( ({callback,}) => {
-    console.log('AddItemForm')
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null >('') // принимает либо строку, либо null
