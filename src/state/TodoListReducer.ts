@@ -1,4 +1,4 @@
-import {FilterValuesType, TodoListType} from './App';
+import {FilterValuesType, TodoListType} from '../App';
 import {v1} from 'uuid';
 
 // С первым системным экшеном, который редакс диспатчит\отправляет в наши редьюсеры стейт не приходит. Он равен undefined, его нет, потому что жизнь только зарождается, поэтому пишем для state значение по умолчанию

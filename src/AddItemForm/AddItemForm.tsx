@@ -2,7 +2,7 @@ import React, {ChangeEvent, FC, KeyboardEvent, memo, useState} from 'react';
 import Button from "@mui/material/Button";
 import TextField from '@mui/material/TextField';
 
-type AddItemFormType = {
+export type AddItemFormType = {
     callback: (title: string) => void
 }
 

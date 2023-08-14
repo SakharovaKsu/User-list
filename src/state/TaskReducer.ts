@@ -1,4 +1,4 @@
-import {TaskAssocType} from './App';
+import {TaskAssocType} from '../App';
 import {v1} from 'uuid';
 import {AddTodoListType, RemoveTodoListType} from './TodoListReducer';
 

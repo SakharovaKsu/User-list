@@ -1,6 +1,6 @@
 import {v1} from 'uuid';
 import {addTaskAC, changeStatusTaskAC, removeTaskAC, TasksReducer, updateTaskAC} from './TaskReducer';
-import {TaskAssocType} from './App';
+import {TaskAssocType} from '../App';
 import {addTodoListAC} from './TodoListReducer';
 
 let defTasks: TaskAssocType
