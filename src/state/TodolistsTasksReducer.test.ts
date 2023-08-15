@@ -1,6 +1,5 @@
-import {addTodoListAC, removeTodoListAC, TodoListReducer} from './TodoListReducer';
-import {TaskAssocType, TodoListType} from '../App';
-import {TasksReducer} from './TaskReducer';
+import {addTodoListAC, removeTodoListAC, TodoListReducer, TodoListType} from './TodoListReducer';
+import {TaskAssocType, TasksReducer} from './TaskReducer';
 
 let startState: TaskAssocType
 

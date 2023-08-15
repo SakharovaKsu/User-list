@@ -1,13 +1,20 @@
 import React, {useReducer} from 'react';
 import './App.css';
-import TodoList, {TaskType} from "./TodoList";
+import TodoList from "./TodoList";
 import {v1} from "uuid";
 import AddItemForm from "./AddItemForm/AddItemForm";
 import ButtonAppBar from "./ButtonAppBar";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {addTodoListAC, changeFilterAC, removeTodoListAC, TodoListReducer, updateTodoListAC} from './state/TodoListReducer';
+import {
+    addTodoListAC,
+    changeFilterAC,
+    FilterValuesType,
+    removeTodoListAC,
+    TodoListReducer, TodoListType,
+    updateTodoListAC
+} from './state/TodoListReducer';
 import {addTaskAC, changeStatusTaskAC, removeTaskAC, TasksReducer, updateTaskAC} from './state/TaskReducer';
 
 
@@ -58,7 +65,7 @@ function App() {
         dispatchTodoList(updateTodoListAC(todoListId, updateTitle))
     }
 
-    const changeFilter = (todoListId: string, value:FilterValuesType) => {
+    const changeFilter = (todoListId: string, value: FilterValuesType) => {
         dispatchTodoList(changeFilterAC(todoListId, value))
     }
 

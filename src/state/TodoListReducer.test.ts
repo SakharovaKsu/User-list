@@ -1,5 +1,11 @@
-import {addTodoListAC, changeFilterAC, removeTodoListAC, TodoListReducer, updateTodoListAC} from './TodoListReducer';
-import {FilterValuesType, TodoListType} from '../App';
+import {
+    addTodoListAC,
+    changeFilterAC, FilterValuesType,
+    removeTodoListAC,
+    TodoListReducer,
+    TodoListType,
+    updateTodoListAC
+} from './TodoListReducer';
 
 let defTodo: TodoListType[]
 

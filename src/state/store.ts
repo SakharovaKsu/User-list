@@ -5,7 +5,7 @@ import {TasksReducer} from './TaskReducer';
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
 const rootReducer = combineReducers({
-    todoList: TodoListReducer,
+    todoLists: TodoListReducer,
     tasks: TasksReducer
 })
 

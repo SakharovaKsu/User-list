@@ -25,7 +25,7 @@ export type TaskAssocType = {
 function AppWithRedux() {
 
     // берем данные из store
-    const todoList = useSelector<AppRootStateType, TodoListType[]>(state => state.todoList)
+    const todoList = useSelector<AppRootStateType, TodoListType[]>(state => state.todoLists)
     const tasks = useSelector<AppRootStateType, TaskAssocType>(state => state.tasks)
 
     // Получаем функцию dispatch из Redux store. Функция dispatch используется для отправки действий (actions)
