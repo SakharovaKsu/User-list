@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FC, memo} from 'react';
 import s from '../TodoList.module.css';
 import Checkbox from '@mui/material/Checkbox';
-import EditableSpan from '../EditableSpan';
+import EditableSpan from '../EditableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {TaskType} from '../TodoList';

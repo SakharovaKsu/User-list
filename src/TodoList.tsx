@@ -2,7 +2,7 @@ import React, {FC, useCallback, memo} from 'react';
 import {FilterValuesType} from './App';
 import s from './TodoList.module.css';
 import AddItemForm from './AddItemForm/AddItemForm';
-import EditableSpan from './EditableSpan';
+import EditableSpan from './EditableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {ButtonWithMemo} from './ButtonWithMemo';
