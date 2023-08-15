@@ -1,11 +1,10 @@
 import {Meta, StoryObj} from '@storybook/react';
-import {action} from '@storybook/addon-actions';
 import {TaskWithRedux} from './TaskWithRedux';
-import {TaskType} from '../TodoList';
-import {Provider} from 'react-redux';
-import {store} from '../state/store';
 import React from 'react';
 import {ReduxStoreProviderDecorator} from '../state/ReduxStoreProviderDecorator';
+import {useSelector} from 'react-redux';
+import {AppRootStateType} from '../state/store';
+import {TaskType} from '../state/TaskReducer';
 
 
 const meta: Meta<typeof TaskWithRedux> = {
@@ -19,10 +18,10 @@ const meta: Meta<typeof TaskWithRedux> = {
     tags: ['autodocs'],
 
     // Добавляем то, что дублируется (это пропсы, которые необходимы компоненте)
-    args: {
-        task: {id: '757575', title: 'Redux', isDone: false},
-        todolistId: 'todo1'
-    },
+    // args: {
+    //     task: {id: '757575', title: 'Redux', isDone: false},
+    //     todolistId: 'todo1'
+    // },
     decorators: [ReduxStoreProviderDecorator]
 };
 
@@ -30,6 +29,14 @@ export default meta
 
 type Story = StoryObj<typeof TaskWithRedux>;
 
+const TaskComponent = () => {
+
+    const task = useSelector<AppRootStateType, TaskType>(state => state.tasks['todolistId1'][0])
+
+    return <TaskWithRedux task={task} todolistId={'todolistId1'}/>
+}
+
 export const TaskWithReduxStory: Story = {
-    render: args => <TaskWithRedux {...args}/>
+    // render: args => <TaskWithRedux {...args}/>
+    render: args => <TaskComponent/>
 }

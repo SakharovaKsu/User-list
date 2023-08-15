@@ -34,7 +34,7 @@ const initialGlobalState: AppRootStateType = {
 export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState);
 
 export const ReduxStoreProviderDecorator = (fn:() => React.ReactNode) => {
-    return <Provider store={store}>{fn()}</Provider>
+    return <Provider store={storyBookStore}>{fn()}</Provider>
 }
 
 // возникает ошибка когда добавляю вместо store - storyBookStore

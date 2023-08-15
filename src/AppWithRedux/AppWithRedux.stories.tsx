@@ -16,5 +16,5 @@ export default meta;
 type Story = StoryObj<typeof AppWithRedux>;
 
 export const AppWithReduxStories: Story = {
-    render: args =>  <AppWithRedux/>
+    render: args =>  <AppWithRedux />
 }

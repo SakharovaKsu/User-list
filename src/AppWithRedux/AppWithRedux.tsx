@@ -1,13 +1,13 @@
 import React, {useCallback} from 'react';
 import '../App.css';
-import TodoList, {TaskType} from '../TodoList';
+import TodoList from '../TodoList';
 import AddItemForm from '../AddItemForm/AddItemForm';
 import ButtonAppBar from '../ButtonAppBar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {addTodoListAC, changeFilterAC, removeTodoListAC, updateTodoListAC} from '../state/TodoListReducer';
-import {addTaskAC, changeStatusTaskAC, removeTaskAC, updateTaskAC} from '../state/TaskReducer';
+import {addTaskAC, changeStatusTaskAC, removeTaskAC, TaskType, updateTaskAC} from '../state/TaskReducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../state/store';
 
@@ -65,7 +65,7 @@ function AppWithRedux() {
     const changeStatus = useCallback((todoListId: string, taskID: string, isDone: boolean) => {
         dispatch(changeStatusTaskAC(todoListId, taskID, isDone))
     }, [dispatch])
-
+    console.log(todoList)
     return (
         <div className="App">
             <ButtonAppBar />
