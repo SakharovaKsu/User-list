@@ -6,8 +6,8 @@ import EditableSpan from './EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {ButtonWithMemo} from './ButtonWithMemo';
-import {Task} from './Task';
-import {TaskWithRedux} from './TaskWithRedux';
+import {Task} from './Task/Task';
+import {TaskWithRedux} from './Task/TaskWithRedux';
 
 type TodoListPropsType = {
     todoListTitle: string

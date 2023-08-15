@@ -34,8 +34,12 @@ export const AddItemFormStory: Story = {
     }
 }
 
+export const AddItemFormErrorStory: Story = {
+    render: () => <Component callback={action('Button clicked inside form')}/>
+}
+
 // создание компоненты с ошибкой
-export const Component:FC<AddItemFormType> = ({callback,}) => {
+const Component:FC<AddItemFormType> = ({callback,}) => {
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null >('Title is required') // принимает либо строку, либо null
@@ -87,8 +91,4 @@ export const Component:FC<AddItemFormType> = ({callback,}) => {
                     onClick={newTask}>+</Button>
         </div>
     )
-}
-
-export const AddItemFormErrorStory: Story = {
-    render: () => <Component callback={action('Button clicked inside form')}/>
 }
