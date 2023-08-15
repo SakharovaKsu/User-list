@@ -11,15 +11,7 @@ import {addTodoListAC, changeFilterAC, removeTodoListAC, TodoListReducer, update
 import {addTaskAC, changeStatusTaskAC, removeTaskAC, TasksReducer, updateTaskAC} from './state/TaskReducer';
 
 
-export type FilterValuesType = 'all' | 'active' | 'completed'
-export type TodoListType = {
-    id: string
-    title: string
-    filter: FilterValuesType
-}
-export type TaskAssocType = {
-    [key: string]: TaskType[]
-}
+
 
 const todoListId1 = v1()
 const todoListId2 = v1()

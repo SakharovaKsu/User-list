@@ -23,12 +23,6 @@ type TodoListPropsType = {
     updateTodoList: (todoListId: string, updateTitle: string) => void
 }
 
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
-
 const TodoList: FC<TodoListPropsType> = memo(({
     todoListId,
     todoListTitle,

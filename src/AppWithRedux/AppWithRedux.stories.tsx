@@ -1,8 +1,6 @@
 import {Meta, StoryObj} from '@storybook/react';
 import AppWithRedux from './AppWithRedux';
-import {Provider} from 'react-redux';
 import React from 'react';
-import {store} from '../state/store';
 import {ReduxStoreProviderDecorator} from '../state/ReduxStoreProviderDecorator';
 
 const meta: Meta<typeof AppWithRedux> = {

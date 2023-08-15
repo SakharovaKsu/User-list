@@ -33,9 +33,3 @@ type Story = StoryObj<typeof TaskWithRedux>;
 export const TaskWithReduxStory: Story = {
     render: args => <TaskWithRedux {...args}/>
 }
-//
-// export const TaskIsNotDoneStory: Story = {
-//     args: {
-//         task: {id: 'task', title: 'task', isDone: false},
-//     }
-// }

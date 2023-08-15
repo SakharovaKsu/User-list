@@ -1,5 +1,12 @@
-import {FilterValuesType, TodoListType} from '../App';
 import {v1} from 'uuid';
+
+export type FilterValuesType = 'all' | 'active' | 'completed'
+
+export type TodoListType = {
+    id: string
+    title: string
+    filter: FilterValuesType
+}
 
 // С первым системным экшеном, который редакс диспатчит\отправляет в наши редьюсеры стейт не приходит. Он равен undefined, его нет, потому что жизнь только зарождается, поэтому пишем для state значение по умолчанию
 const initialState:TodoListType[] = []
