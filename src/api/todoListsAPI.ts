@@ -9,16 +9,18 @@ export type TodoListsType = {
 
 // в дженерик T (<T>) может прийти пустой объект или TodoListsType, или еще что.
 // То что приходит уточняем ниже в типизации (<ResponseType<{}>>)
-type ResponseType<T> = {
+// T = {} Ставим пустой объект по умолчанию
+export type ResponseType<T = {}> = {
     resultCode: number
-    messages: Array<string>,
+    messages: string[],
     data: T
 }
 
 // что бы авторизация на сервере не терялась в другой вкладке - добавляем withCredentials: true
 // иначе ошибка 401 (используем как второй параметр при запросе)
 
-// В baseURL прописываем путь, который дублируется везде (для рефакторинга)
+// В baseURL прописываем путь, который дублируется везде (для рефакторинга).
+// create - это метод в библиотеке, который позволяет создавать новые экземпляры Axios с настраиваемой конфигурацией.
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -31,9 +33,10 @@ const instance = axios.create({
 })
 
 export const todoListsAPI = {
+
     getTodoLists() {
         // В get придет <Array<TodoListsType>> (массив туду листов)
-        return instance.get<Array<TodoListsType>>('todo-lists')
+        return instance.get<TodoListsType[]>('todo-lists')
     },
 
     createTodolist(title: string){
@@ -41,10 +44,10 @@ export const todoListsAPI = {
     },
 
     deleteTodolist(todoID: string){
-        return instance.delete<ResponseType<{}>>(`todo-lists/${todoID}`)
+        return instance.delete<ResponseType>(`todo-lists/${todoID}`)
     },
 
     updateTodolistTitle(todoID: string, title: string){
-        return instance.put<ResponseType<{}>>(`todo-lists/${todoID}`,{title})
+        return instance.put<ResponseType>(`todo-lists/${todoID}`,{title})
     }
 }
