@@ -1,20 +1,8 @@
 import React, {useEffect, useState} from 'react'
-import axios from 'axios';
-import {debug} from 'util';
+import {todoListsAPI} from './todoListsAPI';
 
 export default {
     title: 'API'
-}
-
-// что бы авторизация на сервере не терялась в другой вкладке
-// иначе ошибка 401 (используем как второй параметр при запросе)
-const settings = {
-    withCredentials: true,
-
-    // ключ брала из личного кабинета
-    header: {
-        'API-KEY': '38441d44-efce-4f1f-95aa-be1f9fc10993'
-    }
 }
 
 export const GetTodolists = () => {
@@ -25,7 +13,7 @@ export const GetTodolists = () => {
         // Здесь делаем запрос и ответ закидывать в стейт,
         // который в виде строки будем отображать в div-ке
 
-        axios.get('https://social-network.samuraijs.com/api/1.1/todo-lists', settings)
+        todoListsAPI.getTodoLists()
             .then((res) => {
                 setState(res.data)
             })
@@ -43,7 +31,7 @@ export const CreateTodolist = () => {
     const title = 'JS'
 
     useEffect(() => {
-        axios.post('https://social-network.samuraijs.com/api/1.1/todo-lists',{title}, settings)
+        todoListsAPI.createTodolist(title)
             .then((res) => {
                 setState(res.data)
             })
@@ -58,7 +46,7 @@ export const DeleteTodolist = () => {
     const todoID = 'de07f171-ab5c-4e11-be40-80a65425c4b3'
 
     useEffect(() => {
-        axios.delete(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todoID}`, settings)
+        todoListsAPI.deleteTodolist(todoID)
             .then((res) => {
                 setState(res.data)
             })
@@ -74,7 +62,7 @@ export const UpdateTodolistTitle = () => {
     const title = 'REACT'
 
     useEffect(() => {
-        axios.put(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todoID}`,{title}, settings)
+        todoListsAPI.updateTodolistTitle(todoID, title)
             .then((res) => {
                 setState(res.data)
             })
