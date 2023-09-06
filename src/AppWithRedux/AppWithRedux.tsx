@@ -7,7 +7,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {addTodoListAC, changeFilterAC, removeTodoListAC, updateTodoListAC} from '../state/TodoListReducer';
-import {addTaskAC, changeStatusTaskAC, removeTaskAC, TaskType, updateTaskAC} from '../state/TaskReducer';
+import {addTaskAC, changeStatusTaskAC, removeTaskAC, TaskStatuses, TasksType, updateTaskAC} from '../state/TaskReducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../state/store';
 
@@ -19,7 +19,7 @@ export type TodoListType = {
     filter: FilterValuesType
 }
 export type TaskAssocType = {
-    [key: string]: TaskType[]
+    [key: string]: TasksType[]
 }
 
 function AppWithRedux() {
@@ -62,10 +62,10 @@ function AppWithRedux() {
         dispatch(updateTaskAC(todoListId, taskId, updateTitle))
     }, [dispatch])
 
-    const changeStatus = useCallback((todoListId: string, taskID: string, isDone: boolean) => {
-        dispatch(changeStatusTaskAC(todoListId, taskID, isDone))
+    const changeStatus = useCallback((todoListId: string, taskID: string, status: TaskStatuses) => {
+        dispatch(changeStatusTaskAC(todoListId, taskID, status))
     }, [dispatch])
-    console.log(todoList)
+
     return (
         <div className="App">
             <ButtonAppBar />

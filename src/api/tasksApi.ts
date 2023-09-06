@@ -1,19 +1,6 @@
 import axios from 'axios';
 import {ResponseType} from './todoListsAPI'
-
-export type TasksType = {
-    description: string
-    title: string
-    completed: boolean
-    status: number
-    priority: number
-    startDate: string
-    deadline: string
-    id?: string
-    todoListId?: string
-    order?: number
-    addedDate?: string
-}
+import {TasksType} from '../state/TaskReducer';
 
 type ResponseTaskType = {
     items: TasksType[]

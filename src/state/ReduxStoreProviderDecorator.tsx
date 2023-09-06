@@ -3,7 +3,7 @@ import {Provider} from "react-redux";
 import {AppRootStateType} from './store';
 import {combineReducers,  legacy_createStore} from "redux";
 import {v1} from "uuid";
-import {TasksReducer} from './TaskReducer';
+import {TasksReducer, TaskStatuses, TodoTaskPriority} from './TaskReducer';
 import {TodoListReducer} from './TodoListReducer';
 
 // Это декоратор для сторибука для компонентов где используется редакс
@@ -16,17 +16,35 @@ const rootReducer = combineReducers({
 
 const initialGlobalState: AppRootStateType = {
     todoLists: [
-        {id: "todolistId1", title: "What to learn", filter: "all"},
-        {id: "todolistId2", title: "What to buy", filter: "all"}
+        {id: 'todoListId1', title: 'What to learn', filter: 'all',
+            addedData: '', order: 0},
+        {id: 'todoListId2', title: 'What to buy', filter: 'all',
+            addedData: '', order: 1}
     ] ,
     tasks: {
-        ["todolistId1"]: [
-            {id: v1(), title: "HTML&CSS", isDone: true},
-            {id: v1(), title: "JS", isDone: false}
+        ['todolistId1']: [
+            {
+                id: v1(), title: 'JS', description: '', completed: false,
+                status: TaskStatuses.New, priority: TodoTaskPriority.Urgently, startDate: '',
+                deadline: '', todoListId: 'todolistId1', order: 0, addedDate: ''
+            },
+            {
+                id: v1(), title: 'React', description: '', completed: false,
+                status: TaskStatuses.New, priority: TodoTaskPriority.Low, startDate: '',
+                deadline: '', todoListId: 'todoListId1', order: 0, addedDate: ''
+            },
         ],
-        ["todolistId2"]: [
-            {id: v1(), title: "Milk", isDone: false},
-            {id: v1(), title: "React Book", isDone: true}
+        ['todolistId2']: [
+            {
+                id: v1(), title: 'HTML&CSS', description: '', completed: false,
+                status: TaskStatuses.New, priority: TodoTaskPriority.Urgently, startDate: '',
+                deadline: '', todoListId: 'todoListId2', order: 0, addedDate: ''
+            },
+            {
+                id: v1(), title: 'JS', description: '', completed: false,
+                status: TaskStatuses.New, priority: TodoTaskPriority.Urgently, startDate: '',
+                deadline: '', todoListId: 'todoListId2', order: 0, addedDate: ''
+            }
         ]
     }
 };

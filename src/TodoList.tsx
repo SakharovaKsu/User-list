@@ -6,17 +6,17 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {ButtonWithMemo} from './ButtonWithMemo';
 import {TaskWithRedux} from './Task/TaskWithRedux';
-import {TaskType} from './state/TaskReducer';
+import {TaskStatuses, TasksType} from './state/TaskReducer';
 import {FilterValuesType} from './state/TodoListReducer';
 
 type TodoListPropsType = {
     todoListTitle: string
     todoListId: string
-    tasks: TaskType[]
+    tasks: TasksType[]
     removeTask: (todoListId: string, taskId: string) => void
     changeFilter: (todoListId: string, filter:FilterValuesType) => void
     addTask: (todoListId: string, title: string) => void
-    changeStatus: (todoListId: string, taskID: string, isDone: boolean) => void
+    changeStatus: (todoListId: string, taskID: string, status: TaskStatuses) => void
     filter: FilterValuesType
     removeTodoList: (todoListId: string) => void
     updateTask: (todoListId: string, taskId: string, updateTitle: string) => void
@@ -49,11 +49,11 @@ const TodoList: FC<TodoListPropsType> = memo(({
     }
 
     if(filter === 'active') {
-        tasks = tasks.filter(t => !t.isDone )
+        tasks = tasks.filter(t => t.status === TaskStatuses.New)
     }
 
     if(filter === 'completed') {
-        tasks = tasks.filter(t => t.isDone )
+        tasks = tasks.filter(t => t.status === TaskStatuses.Completed)
     }
 
     // фильтрация при клике
@@ -64,7 +64,6 @@ const TodoList: FC<TodoListPropsType> = memo(({
     //  Лишка
     const tasksJSX:Array<JSX.Element> = tasks?.map((t) => {
         return (
-            // <Task key={t.id} task={t} removeTask={removeTaskHandler} changeStatus={changeStatusTask} updateTaskHandler={updateTaskHandler}/>
             <TaskWithRedux key={t.id} task={t} todolistId={todoListId}/>
         )
     })

@@ -1,14 +1,38 @@
 import {v1} from 'uuid';
 import {AddTodoListType, RemoveTodoListType} from './TodoListReducer';
 
-export type TaskType = {
-    id: string
+// Для определения статуса таски, выполнена или нет
+export enum TaskStatuses {
+    New = 0, // Не выполнена
+    InProgress = 1,
+    Completed = 2, // Выполнена таска
+    Draft = 3
+}
+
+export enum TodoTaskPriority {
+    Low = 0,
+    Middle = 1,
+    Hi = 2,
+    Urgently = 3,
+    Later = 4
+}
+
+export type TasksType = {
+    description: string
     title: string
-    isDone: boolean
+    completed: boolean
+    status: TaskStatuses
+    priority: TodoTaskPriority
+    startDate: string
+    deadline: string
+    id: string
+    todoListId?: string
+    order?: number
+    addedDate?: string
 }
 
 export type TaskAssocType = {
-    [key: string]: TaskType[]
+    [key: string]: TasksType[]
 }
 
 const initialState: TaskAssocType = {}
@@ -23,7 +47,19 @@ export const TasksReducer = (state = initialState, action: tsarType): TaskAssocT
             }
         }
         case 'ADD-TASK': {
-            let newTask = {id: v1(), title: action.payload.title, isDone: false}
+            let newTask = {
+                id: v1(),
+                title: action.payload.title,
+                description: '',
+                completed: false,
+                status: TaskStatuses.New,
+                priority: 1,
+                startDate: '',
+                deadline: '',
+                todoListId: '',
+                order: 0,
+                addedDate: ''
+            }
 
             if(state[action.payload.todoListId]) {
                  return {...state, [action.payload.todoListId]: [newTask, ...state[action.payload.todoListId]]}
@@ -44,7 +80,7 @@ export const TasksReducer = (state = initialState, action: tsarType): TaskAssocT
             // tasks.map(el => el.id === taskID ? {...el, isDone: checkedValue} : el) // делаем копию через map (массива и всех объектов), ищем id (а можем и не найти, то ничего не возвращает), если нашла - копируем объект (...el). и перезаписываем isDone: checkedValue. Он перезапишется так как старое значение будет совпадать по названию с новым
 
             return {...state, [action.payload.todoListId]: state[action.payload.todoListId]
-                    .map(t => t.id === action.payload.taskID ? {...t, isDone: action.payload.isDone} : t)}
+                    .map(t => t.id === action.payload.taskID ? {...t, status: action.payload.status} : t)}
         }
         case 'ADD-TODOLIST': {
             return {...state, [action.payload.todoListId] : []}
@@ -88,9 +124,9 @@ export const updateTaskAC = (todoListId: string, taskId: string, updateTitle: st
     } as const
 }
 
-export const changeStatusTaskAC = (todoListId: string, taskID: string, isDone: boolean) => {
+export const changeStatusTaskAC = (todoListId: string, taskID: string, status: TaskStatuses) => {
     return {
         type: 'CHANGE-STATUS-TASK',
-        payload: {todoListId, taskID, isDone}
+        payload: {todoListId, taskID, status}
     } as const
 }

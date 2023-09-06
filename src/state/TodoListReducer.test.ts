@@ -3,26 +3,28 @@ import {
     changeFilterAC, FilterValuesType,
     removeTodoListAC,
     TodoListReducer,
-    TodoListType,
+    TodoListEntityType,
     updateTodoListAC
 } from './TodoListReducer';
 
-let defTodo: TodoListType[]
+let defTodo: TodoListEntityType[]
 
 beforeEach(() => {
     defTodo = [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all'},
-        {id: 'todolistId2', title: 'What to buy', filter: 'all'}
+        {id: 'todoListId1', title: 'What to learn', filter: 'all',
+            addedData: '', order: 0},
+        {id: 'todoListId2', title: 'What to buy', filter: 'all',
+            addedData: '', order: 1}
     ]
 })
 
 test ('correct todolist should be removed', () => {
 
-    const action = removeTodoListAC('todolistId1')
+    const action = removeTodoListAC('todolistId2')
     const endState = TodoListReducer(defTodo, action)
 
     expect(endState).toEqual([
-        {id: 'todolistId2', title: 'What to buy', filter: 'all'}
+        {id: 'todolistId1', title: 'What to learn', filter: 'all', addedData: "", order: 0,}
     ]);
     expect(endState.length).toBe(1)
     expect(endState[0].id).toBe('todolistId2')

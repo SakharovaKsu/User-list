@@ -12,37 +12,70 @@ import {
     changeFilterAC,
     FilterValuesType,
     removeTodoListAC,
-    TodoListReducer, TodoListType,
+    TodoListReducer, TodoListEntityType,
     updateTodoListAC
 } from './state/TodoListReducer';
-import {addTaskAC, changeStatusTaskAC, removeTaskAC, TasksReducer, updateTaskAC} from './state/TaskReducer';
-
-
-
+import {
+    addTaskAC,
+    changeStatusTaskAC,
+    removeTaskAC,
+    TasksReducer,
+    TaskStatuses, TodoTaskPriority,
+    updateTaskAC
+} from './state/TaskReducer';
 
 const todoListId1 = v1()
 const todoListId2 = v1()
 
 const defTasks = {
     [todoListId1]: [
-        {id: v1(), title: 'HTML&CSS', isDone: true},
-        {id: v1(), title: 'JS', isDone: true},
-        {id: v1(), title: 'React', isDone: false},
-        {id: v1(), title: 'TS', isDone: false}
+        {
+            id: v1(), title: 'JS', description: '', completed: false,
+            status: TaskStatuses.New, priority: TodoTaskPriority.Urgently, startDate: '',
+            deadline: '', todoListId: todoListId1, order: 0, addedDate: ''
+        },
+        {
+            id: v1(), title: 'React', description: '', completed: false,
+            status: TaskStatuses.New, priority: TodoTaskPriority.Low, startDate: '',
+            deadline: '', todoListId: todoListId1, order: 0, addedDate: ''
+        },
+        {
+            id: v1(), title: 'TS', description: '', completed: false,
+            status: TaskStatuses.New, priority: TodoTaskPriority.Low, startDate: '',
+            deadline: '', todoListId: todoListId1, order: 0, addedDate: ''
+        }
     ],
     [todoListId2]: [
-        {id: v1(), title: 'HTML&CSS', isDone: true},
-        {id: v1(), title: 'JS', isDone: true},
-        {id: v1(), title: 'React', isDone: false},
-        {id: v1(), title: 'TS', isDone: false}
+        {
+            id: v1(), title: 'HTML&CSS', description: '', completed: false,
+            status: TaskStatuses.New, priority: TodoTaskPriority.Urgently, startDate: '',
+            deadline: '', todoListId: todoListId2, order: 0, addedDate: ''
+        },
+        {
+            id: v1(), title: 'JS', description: '', completed: false,
+            status: TaskStatuses.New, priority: TodoTaskPriority.Urgently, startDate: '',
+            deadline: '', todoListId: todoListId2, order: 0, addedDate: ''
+        },
+        {
+            id: v1(), title: 'React', description: '', completed: false,
+            status: TaskStatuses.New, priority: TodoTaskPriority.Low, startDate: '',
+            deadline: '', todoListId: todoListId2, order: 0, addedDate: ''
+        },
+        {
+            id: v1(), title: 'TS', description: '', completed: false,
+            status: TaskStatuses.New, priority: TodoTaskPriority.Low, startDate: '',
+            deadline: '', todoListId: todoListId2, order: 0, addedDate: ''
+        }
     ]
 }
 
 // [todoListId1] обернули в скобки, что б получить то, что лежит в переменной, если ставим без кавычек, то этот ключ превратится в стрингу под капотом
 
-export const defTodo: TodoListType[] = [
-    {id: todoListId1, title: 'What to learn', filter: 'all'},
-    {id: todoListId2, title: 'What to buy', filter: 'all'}
+export const defTodo: TodoListEntityType[] = [
+    {id: todoListId1, title: 'What to learn', filter: 'all',
+        addedData: '', order: 0},
+    {id: todoListId2, title: 'What to buy', filter: 'all',
+        addedData: '', order: 1}
 ]
 
 function App() {
@@ -83,8 +116,8 @@ function App() {
         dispatchTasks(updateTaskAC(todoListId, taskId, updateTitle))
     }
 
-    const changeStatus = (todoListId: string, taskID: string, isDone: boolean) => {
-        dispatchTasks(changeStatusTaskAC(todoListId, taskID, isDone))
+    const changeStatus = (todoListId: string, taskID: string, status: TaskStatuses) => {
+        dispatchTasks(changeStatusTaskAC(todoListId, taskID, status))
     }
 
     return (
@@ -101,11 +134,11 @@ function App() {
                         let tasksForTodoList = tasks[tl.id]
 
                         if(tl.filter === 'active') {
-                            tasksForTodoList = tasks[tl.id].filter(t => !t.isDone )
+                            tasksForTodoList = tasks[tl.id].filter(t => t.status === TaskStatuses.New)
                         }
 
                         if(tl.filter === 'completed') {
-                            tasksForTodoList = tasks[tl.id].filter(t => t.isDone )
+                            tasksForTodoList = tasks[tl.id].filter(t => t.status === TaskStatuses.Completed)
                         }
 
                         return (

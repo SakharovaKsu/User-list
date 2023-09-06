@@ -4,7 +4,7 @@ import React from 'react';
 import {ReduxStoreProviderDecorator} from '../state/ReduxStoreProviderDecorator';
 import {useSelector} from 'react-redux';
 import {AppRootStateType} from '../state/store';
-import {TaskType} from '../state/TaskReducer';
+import {TasksType} from '../state/TaskReducer';
 
 
 const meta: Meta<typeof TaskWithRedux> = {
@@ -31,7 +31,7 @@ type Story = StoryObj<typeof TaskWithRedux>;
 
 const TaskComponent = () => {
 
-    const task = useSelector<AppRootStateType, TaskType>(state => state.tasks['todolistId1'][0])
+    const task = useSelector<AppRootStateType, TasksType>(state => state.tasks['todolistId1'][0])
 
     return <TaskWithRedux task={task} todolistId={'todolistId1'}/>
 }

@@ -1,11 +1,5 @@
 import axios from 'axios';
-
-export type TodoListsType = {
-    id: string
-    title: string
-    addedData: string
-    order: number
-}
+import {TodoListsType} from '../state/TodoListReducer';
 
 // в дженерик T (<T>) может прийти пустой объект или TodoListsType, или еще что.
 // То что приходит уточняем ниже в типизации (<ResponseType<{}>>)

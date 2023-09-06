@@ -1,26 +1,50 @@
-import {addTodoListAC, removeTodoListAC, TodoListReducer, TodoListType} from './TodoListReducer';
-import {TaskAssocType, TasksReducer} from './TaskReducer';
+import {addTodoListAC, removeTodoListAC, TodoListReducer, TodoListEntityType} from './TodoListReducer';
+import {TaskAssocType, TasksReducer, TaskStatuses, TodoTaskPriority} from './TaskReducer';
 
 let startState: TaskAssocType
 
 beforeEach(() => {
     startState = {
-        'todolistId1': [
-            {id: '1', title: 'CSS', isDone: false},
-            {id: '2', title: 'JS', isDone: true},
-            {id: '3', title: 'React', isDone: false}
+        'todoListId1': [
+            {
+                id: '1', title: 'CSS', description: '', completed: false,
+                status: TaskStatuses.New, priority: TodoTaskPriority.Urgently, startDate: '',
+                deadline: '', todoListId: 'todoListId1', order: 0, addedDate: ''
+            },
+            {
+                id: '2', title: 'JS', description: '', completed: false,
+                status: TaskStatuses.Completed, priority: TodoTaskPriority.Low, startDate: '',
+                deadline: '', todoListId: 'todoListId1', order: 0, addedDate: ''
+            },
+            {
+                id: '3', title: 'React', description: '', completed: false,
+                status: TaskStatuses.New, priority: TodoTaskPriority.Low, startDate: '',
+                deadline: '', todoListId: 'todoListId1', order: 0, addedDate: ''
+            }
         ],
-        'todolistId2': [
-            {id: '1', title: 'bread', isDone: false},
-            {id: '2', title: 'milk', isDone: true},
-            {id: '3', title: 'tea', isDone: false}
+        'todoListId2': [
+            {
+                id: '1', title: 'bread', description: '', completed: false,
+                status: TaskStatuses.New, priority: TodoTaskPriority.Urgently, startDate: '',
+                deadline: '', todoListId: 'todoListId2', order: 0, addedDate: ''
+            },
+            {
+                id: '2', title: 'milk', description: '', completed: false,
+                status: TaskStatuses.Completed, priority: TodoTaskPriority.Urgently, startDate: '',
+                deadline: '', todoListId: 'todoListId2', order: 0, addedDate: ''
+            },
+            {
+                id: '3', title: 'tea', description: '', completed: false,
+                status: TaskStatuses.New, priority: TodoTaskPriority.Low, startDate: '',
+                deadline: '', todoListId: 'todoListId2', order: 0, addedDate: ''
+            }
         ]
     }
 })
 
 test('ids should be equals', () => {
     const startTasksState: TaskAssocType = {}
-    const startTodolistsState: TodoListType[] = []
+    const startTodolistsState: TodoListEntityType[] = []
 
     const action = addTodoListAC('new todolist')
 

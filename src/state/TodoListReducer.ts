@@ -1,24 +1,30 @@
 import {v1} from 'uuid';
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
-
-export type TodoListType = {
-    id: string
-    title: string
+type FilterType = {
     filter: FilterValuesType
 }
 
-// С первым системным экшеном, который редакс диспатчит\отправляет в наши редьюсеры стейт не приходит. Он равен undefined, его нет, потому что жизнь только зарождается, поэтому пишем для state значение по умолчанию
-const initialState:TodoListType[] = []
+export type TodoListsType = {
+    id: string
+    title: string
+    addedData: string
+    order: number
+}
 
-export const TodoListReducer = (state = initialState, action: TsarType): TodoListType[] => {
+export type TodoListEntityType = TodoListsType & FilterType
+
+// С первым системным экшеном, который редакс диспатчит\отправляет в наши редьюсеры стейт не приходит. Он равен undefined, его нет, потому что жизнь только зарождается, поэтому пишем для state значение по умолчанию
+const initialState:TodoListEntityType[] = []
+
+export const TodoListReducer = (state = initialState, action: TsarType): TodoListEntityType[] => {
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
             return state.filter(el => el.id !== action.payload.todoListId)
         }
         case 'ADD-TODOLIST': {
-            const newTodo: TodoListType = {id: action.payload.todoListId, title: action.payload.newTitle, filter: 'all'}
-            return [...state, newTodo]
+            const newTodo: TodoListEntityType = {id: action.payload.todoListId, title: action.payload.newTitle, filter: 'all', addedData: '', order: 0}
+            return [newTodo, ...state]
         }
         case 'UPDATE-TODOLIST-TITLE': {
             return state.map(el => el.id === action.payload.todoListId ? {...el, title: action.payload.updateTitle} : el)
@@ -40,10 +46,10 @@ type ChangeFilterType = ReturnType<typeof changeFilterAC>
 type TsarType = RemoveTodoListType | AddTodoListType | UpdateTodoListType | ChangeFilterType
 
 export const removeTodoListAC = (todoListId: string) => {
-   return {
-       type: 'REMOVE-TODOLIST',
-       payload: {todoListId}
-   } as const
+    return {
+        type: 'REMOVE-TODOLIST',
+        payload: {todoListId}
+    } as const
 }
 
 export const addTodoListAC = (newTitle: string) => {
