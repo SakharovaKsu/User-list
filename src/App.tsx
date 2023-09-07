@@ -1,6 +1,6 @@
 import React, {useReducer} from 'react';
 import './App.css';
-import TodoList from "./TodoList";
+import TodoList from "./TodoList/TodoList";
 import {v1} from "uuid";
 import AddItemForm from "./AddItemForm/AddItemForm";
 import ButtonAppBar from "./ButtonAppBar";

@@ -1,5 +1,5 @@
 import React, {ChangeEvent, FC, memo, useCallback} from 'react';
-import s from '../TodoList.module.css';
+import s from '../TodoList/TodoList.module.css';
 import Checkbox from '@mui/material/Checkbox';
 import EditableSpan from '../EditableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
@@ -33,6 +33,7 @@ export const TaskWithRedux: FC<TasksPropsType> = memo(({ task, todolistId}) => {
 
     return (
         <div className={task.status === TaskStatuses.Completed ? s.status : ''}>
+            {/* если чекнуто, то статус ставим Completed */}
             <Checkbox checked={task.status === TaskStatuses.Completed} color="success" onChange={changeStatusTask}/>
             <EditableSpan oldTitle={task.title} callback={updateTask}/>
             <IconButton aria-label="delete" color="success" onClick={removeTask}>

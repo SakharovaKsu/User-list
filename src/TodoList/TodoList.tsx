@@ -1,13 +1,13 @@
 import React, {FC, useCallback, memo} from 'react';
 import s from './TodoList.module.css';
-import AddItemForm from './AddItemForm/AddItemForm';
-import EditableSpan from './EditableSpan/EditableSpan';
+import AddItemForm from '../AddItemForm/AddItemForm';
+import EditableSpan from '../EditableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {ButtonWithMemo} from './ButtonWithMemo';
-import {TaskWithRedux} from './Task/TaskWithRedux';
-import {TaskStatuses, TasksType} from './state/TaskReducer';
-import {FilterValuesType} from './state/TodoListReducer';
+import {ButtonWithMemo} from '../ButtonWithMemo';
+import {TaskWithRedux} from '../Task/TaskWithRedux';
+import {TaskStatuses, TasksType} from '../state/TaskReducer';
+import {FilterValuesType} from '../state/TodoListReducer';
 
 type TodoListPropsType = {
     todoListTitle: string

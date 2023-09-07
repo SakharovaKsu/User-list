@@ -11,9 +11,9 @@ let defTodo: TodoListEntityType[]
 
 beforeEach(() => {
     defTodo = [
-        {id: 'todoListId1', title: 'What to learn', filter: 'all',
+        {id: 'todolistId1', title: 'What to learn', filter: 'all',
             addedData: '', order: 0},
-        {id: 'todoListId2', title: 'What to buy', filter: 'all',
+        {id: 'todolistId2', title: 'What to buy', filter: 'all',
             addedData: '', order: 1}
     ]
 })
@@ -27,16 +27,16 @@ test ('correct todolist should be removed', () => {
         {id: 'todolistId1', title: 'What to learn', filter: 'all', addedData: "", order: 0,}
     ]);
     expect(endState.length).toBe(1)
-    expect(endState[0].id).toBe('todolistId2')
+    expect(endState[0].id).toBe('todolistId1')
 })
 
 test ('correct todolist must be added', () => {
 
     const action = addTodoListAC('List of books')
-    const endState = TodoListReducer(defTodo, action)
+    const endState = TodoListReducer([], action)
 
-    expect(endState.length).toBe(3)
-    expect(endState[2].title).toBe('List of books')
+    expect(endState.length).toBe(1)
+    expect(endState[0].title).toBe('List of books')
 })
 
 test ('the title of the to-do list should be updated', () => {

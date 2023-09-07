@@ -5,38 +5,38 @@ let startState: TaskAssocType
 
 beforeEach(() => {
     startState = {
-        'todoListId1': [
+        'todolistId1': [
             {
                 id: '1', title: 'CSS', description: '', completed: false,
                 status: TaskStatuses.New, priority: TodoTaskPriority.Urgently, startDate: '',
-                deadline: '', todoListId: 'todoListId1', order: 0, addedDate: ''
+                deadline: '', todoListId: 'todolistId1', order: 0, addedDate: ''
             },
             {
                 id: '2', title: 'JS', description: '', completed: false,
                 status: TaskStatuses.Completed, priority: TodoTaskPriority.Low, startDate: '',
-                deadline: '', todoListId: 'todoListId1', order: 0, addedDate: ''
+                deadline: '', todoListId: 'todolistId1', order: 0, addedDate: ''
             },
             {
                 id: '3', title: 'React', description: '', completed: false,
                 status: TaskStatuses.New, priority: TodoTaskPriority.Low, startDate: '',
-                deadline: '', todoListId: 'todoListId1', order: 0, addedDate: ''
+                deadline: '', todoListId: 'todolistId1', order: 0, addedDate: ''
             }
         ],
-        'todoListId2': [
+        'todolistId2': [
             {
                 id: '1', title: 'bread', description: '', completed: false,
                 status: TaskStatuses.New, priority: TodoTaskPriority.Urgently, startDate: '',
-                deadline: '', todoListId: 'todoListId2', order: 0, addedDate: ''
+                deadline: '', todoListId: 'todolistId2', order: 0, addedDate: ''
             },
             {
                 id: '2', title: 'milk', description: '', completed: false,
                 status: TaskStatuses.Completed, priority: TodoTaskPriority.Urgently, startDate: '',
-                deadline: '', todoListId: 'todoListId2', order: 0, addedDate: ''
+                deadline: '', todoListId: 'todolistId2', order: 0, addedDate: ''
             },
             {
                 id: '3', title: 'tea', description: '', completed: false,
                 status: TaskStatuses.New, priority: TodoTaskPriority.Low, startDate: '',
-                deadline: '', todoListId: 'todoListId2', order: 0, addedDate: ''
+                deadline: '', todoListId: 'todolistId2', order: 0, addedDate: ''
             }
         ]
     }
