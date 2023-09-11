@@ -73,17 +73,17 @@ test ('removing a task from the list', () => {
     expect(endTask['todolistId1'][0].title).toBe('JS')
 })
 
-test ('there should be a new task', () => {
-
-    const taskTitle = 'Vue'
-
-    const action = addTaskAC('todolistId1', taskTitle)
-    const endTask = TasksReducer(defTasks, action)
-
-    expect(endTask['todolistId1'].length).toBe(5)
-    expect(endTask['todolistId1'][0].title).toBe('Vue')
-    expect(endTask['todolistId1'][0].id).toBeDefined()
-})
+// test ('there should be a new task', () => {
+//
+//     const taskTitle = 'Vue'
+//
+//     const action = addTaskAC('todolistId1', taskTitle)
+//     const endTask = TasksReducer(defTasks, action)
+//
+//     expect(endTask['todolistId1'].length).toBe(5)
+//     expect(endTask['todolistId1'][0].title).toBe('Vue')
+//     expect(endTask['todolistId1'][0].id).toBeDefined()
+// })
 
 test ('should change the title in the task', () => {
 

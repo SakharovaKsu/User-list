@@ -1,10 +1,11 @@
 import {Meta, StoryObj} from '@storybook/react';
 import {TaskWithRedux} from './TaskWithRedux';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {ReduxStoreProviderDecorator} from '../state/ReduxStoreProviderDecorator';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../state/store';
-import {TasksType} from '../state/TaskReducer';
+import {removeTaskAC, removeTaskTC, TasksType} from '../state/TaskReducer';
+import {removeTodoListAC} from '../state/TodoListReducer';
 
 
 const meta: Meta<typeof TaskWithRedux> = {
@@ -32,8 +33,13 @@ type Story = StoryObj<typeof TaskWithRedux>;
 const TaskComponent = () => {
 
     const task = useSelector<AppRootStateType, TasksType>(state => state.tasks['todolistId1'][0])
+    const dispatch = useDispatch()
 
-    return <TaskWithRedux task={task} todolistId={'todolistId1'}/>
+    const removeTask =  useCallback((todoListId: string, taskId: string) => {
+        dispatch(removeTaskAC(todoListId, taskId))
+    }, [dispatch])
+
+    return <TaskWithRedux task={task} todolistId={'todolistId1'} removeTask={removeTask}/>
 }
 
 export const TaskWithReduxStory: Story = {

@@ -72,27 +72,13 @@ export const TasksReducer = (state = initialState, action: tsarType): TaskAssocT
             }
         }
         case 'ADD-TASK': {
-            let newTask = {
-                id: v1(),
-                title: action.payload.title,
-                description: '',
-                completed: false,
-                status: TaskStatuses.New,
-                priority: 1,
-                startDate: '',
-                deadline: '',
-                todoListId: '',
-                order: 0,
-                addedDate: ''
-            }
-
-            if(state[action.payload.todoListId]) {
-                 return {...state, [action.payload.todoListId]: [newTask, ...state[action.payload.todoListId]]}
+            if(state[action.payload.task.todoListId as string].length) {
+                return {...state, [action.payload.task.todoListId as string]: [action.payload.task, ...state[action.payload.task.todoListId as string]]}
             } else {
-                 return {...state, [action.payload.todoListId]: [newTask]}
+                return {...state, [action.payload.task.todoListId as string]: [action.payload.task]}
             }
 
-            // {...tasks} - копируем весь таск, далее копируем массив тасок по id, в эту копию добавляем новую таску (newTask) и копируем ...tasks[todoListId]
+
         }
         case 'UPDATE-TASK': {
             return {
@@ -128,10 +114,10 @@ export const removeTaskAC = (todoListId: string, taskId: string) => {
     } as const
 }
 
-export const addTaskAC = (todoListId: string, title: string) => {
+export const addTaskAC = (task: TasksType) => {
     return {
         type: 'ADD-TASK',
-        payload: {todoListId, title}
+        payload: {task}
     } as const
 }
 
@@ -161,6 +147,25 @@ export const getTasksTC = (todoID: string) => {
         tasksAPI.getTasks(todoID)
             .then((res) => {
                 dispatch(setTasksAC(todoID, res.data.items))
+            })
+    }
+}
+
+export const removeTaskTC = (todoID: string, tasksID: string) => {
+    return (dispatch: Dispatch) => {
+        tasksAPI.deleteTasks(todoID, tasksID)
+            .then((res) => {
+                dispatch(removeTaskAC(todoID, tasksID))
+            })
+    }
+}
+
+export const addTaskTC = (todoID: string, title: string) => {
+    return (dispatch: Dispatch) => {
+        tasksAPI.createTasks(todoID, title)
+            .then((res) => {
+                debugger
+                dispatch(addTaskAC(res.data.data.item))
             })
     }
 }

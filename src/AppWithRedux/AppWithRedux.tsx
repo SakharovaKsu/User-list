@@ -13,7 +13,15 @@ import {
     removeTodoListAC,
     updateTodoListAC
 } from '../state/TodoListReducer';
-import {addTaskAC, changeStatusTaskAC, removeTaskAC, TaskStatuses, TasksType, updateTaskAC} from '../state/TaskReducer';
+import {
+    addTaskAC, addTaskTC,
+    changeStatusTaskAC,
+    removeTaskAC,
+    removeTaskTC,
+    TaskStatuses,
+    TasksType,
+    updateTaskAC
+} from '../state/TaskReducer';
 import {useSelector} from 'react-redux';
 import {AppRootStateType, useAppDispatch} from '../state/store';
 
@@ -37,6 +45,7 @@ function AppWithRedux() {
     // Получаем функцию dispatch из Redux store. Функция dispatch используется для отправки действий (actions)
     const dispatch = useAppDispatch()
 
+    // сетаем туду листы
     useEffect(() => {
         dispatch(getTodoListTC())
     }, [])
@@ -60,12 +69,12 @@ function AppWithRedux() {
     }, [dispatch])
 
     const removeTask =  useCallback((todoListId: string, taskId: string) => {
-        dispatch(removeTaskAC(todoListId, taskId))
+        dispatch(removeTaskTC(todoListId, taskId))
     }, [dispatch])
 
     // через title получаем значение инпута
     const addTask =  useCallback((todoListId: string, title: string) => {
-        dispatch(addTaskAC(todoListId, title))
+        dispatch(addTaskTC(todoListId, title))
     }, [dispatch])
 
     const updateTask = useCallback((todoListId: string, taskId: string, updateTitle: string) => {

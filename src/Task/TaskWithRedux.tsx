@@ -5,20 +5,24 @@ import EditableSpan from '../EditableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useDispatch} from 'react-redux';
-import {changeStatusTaskAC, removeTaskAC, TaskStatuses, TasksType, updateTaskAC} from '../state/TaskReducer';
+import {
+    changeStatusTaskAC,
+    TaskStatuses,
+    TasksType,
+    updateTaskAC
+} from '../state/TaskReducer';
 
 type TasksPropsType = {
     task: TasksType
     todolistId: string
+    removeTask: (todoListId: string, taskId: string) => void
 }
 
-export const TaskWithRedux: FC<TasksPropsType> = memo(({ task, todolistId}) => {
+export const TaskWithRedux: FC<TasksPropsType> = memo(({ task, todolistId, removeTask}) => {
 
     const dispatch = useDispatch()
 
-    const removeTask = useCallback(() => {
-        dispatch(removeTaskAC(todolistId, task.id))
-    }, [todolistId, task.id])
+    const removeTaskHandler = useCallback(() => removeTask(todolistId, task.id), [todolistId, task.id])
 
     const changeStatusTask = useCallback((e:ChangeEvent<HTMLInputElement>) => {
 
@@ -36,7 +40,7 @@ export const TaskWithRedux: FC<TasksPropsType> = memo(({ task, todolistId}) => {
             {/* если чекнуто, то статус ставим Completed */}
             <Checkbox checked={task.status === TaskStatuses.Completed} color="success" onChange={changeStatusTask}/>
             <EditableSpan oldTitle={task.title} callback={updateTask}/>
-            <IconButton aria-label="delete" color="success" onClick={removeTask}>
+            <IconButton aria-label="delete" color="success" onClick={removeTaskHandler}>
                 <DeleteIcon />
             </IconButton>
         </div>

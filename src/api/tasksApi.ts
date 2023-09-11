@@ -1,7 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
 import {ResponseType} from './todoListsAPI'
 import {TasksType} from '../state/TaskReducer';
-import {TodoListsType} from '../state/TodoListReducer';
 
 type ResponseTaskType = {
     items: TasksType[]
@@ -29,11 +28,11 @@ export const tasksAPI = {
         return instance.post<ResponseType<{item: TasksType}>, AxiosResponse<ResponseType<{item: TasksType}>>, {title: string}>(`todo-lists/${todoID}/tasks`,{title})
     },
 
-    deleteTasks(todoID: string, taskId: string){
-        return instance.delete<ResponseType>(`todo-lists/${todoID}/tasks/${taskId}`)
+    deleteTasks(todoID: string, taskID: string){
+        return instance.delete<ResponseType>(`todo-lists/${todoID}/tasks/${taskID}`)
     },
 
-    updateTasks(todoID: string, taskId: string, title: string){
-        return instance.put<TasksType>(`todo-lists/${todoID}/tasks/${taskId}`,{title})
+    updateTasks(todoID: string, taskID: string, title: string){
+        return instance.put<TasksType>(`todo-lists/${todoID}/tasks/${taskID}`,{title})
     }
 }
