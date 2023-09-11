@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import '../App.css';
 import TodoList from '../TodoList/TodoList';
 import AddItemForm from '../AddItemForm/AddItemForm';
@@ -6,10 +6,15 @@ import ButtonAppBar from '../ButtonAppBar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {addTodoListAC, changeFilterAC, removeTodoListAC, updateTodoListAC} from '../state/TodoListReducer';
+import {
+    addTodoListAC,
+    changeFilterAC, getTodoListThunk,
+    removeTodoListAC,
+    updateTodoListAC
+} from '../state/TodoListReducer';
 import {addTaskAC, changeStatusTaskAC, removeTaskAC, TaskStatuses, TasksType, updateTaskAC} from '../state/TaskReducer';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from '../state/store';
+import {useSelector} from 'react-redux';
+import {AppRootStateType, useAppDispatch} from '../state/store';
 
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
@@ -29,9 +34,13 @@ function AppWithRedux() {
     const tasks = useSelector<AppRootStateType, TaskAssocType>(state => state.tasks)
 
     // Получаем функцию dispatch из Redux store. Функция dispatch используется для отправки действий (actions)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
-    const removeTodoList =  useCallback((todoListId: string) => {
+    useEffect(() => {
+        dispatch(getTodoListThunk)
+    }, [])
+
+    const removeTodoList = useCallback((todoListId: string) => {
         dispatch(removeTodoListAC(todoListId))
     }, [dispatch])
 

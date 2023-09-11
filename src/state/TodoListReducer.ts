@@ -1,4 +1,6 @@
 import {v1} from 'uuid';
+import {todoListsAPI} from '../api/todoListsAPI';
+import {Dispatch} from 'redux';
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 type FilterType = {
@@ -14,11 +16,22 @@ export type TodoListsType = {
 
 export type TodoListEntityType = TodoListsType & FilterType
 
+export type RemoveTodoListType = ReturnType<typeof removeTodoListAC>
+export type AddTodoListType = ReturnType<typeof addTodoListAC>
+type UpdateTodoListType = ReturnType<typeof updateTodoListAC>
+type ChangeFilterType = ReturnType<typeof changeFilterAC>
+export type SetTodoListType = ReturnType<typeof setTodoListAC>
+
+type TsarType = RemoveTodoListType | AddTodoListType | UpdateTodoListType | ChangeFilterType | SetTodoListType
+
 // С первым системным экшеном, который редакс диспатчит\отправляет в наши редьюсеры стейт не приходит. Он равен undefined, его нет, потому что жизнь только зарождается, поэтому пишем для state значение по умолчанию
 const initialState:TodoListEntityType[] = []
 
 export const TodoListReducer = (state = initialState, action: TsarType): TodoListEntityType[] => {
     switch (action.type) {
+        case 'SET-TODOLIST': {
+            return action.payload.todoLists.map(tl => ({...tl, filter: 'all'}))
+        }
         case 'REMOVE-TODOLIST': {
             return state.filter(el => el.id !== action.payload.todoListId)
         }
@@ -37,13 +50,6 @@ export const TodoListReducer = (state = initialState, action: TsarType): TodoLis
             return state
     }
 }
-
-export type RemoveTodoListType = ReturnType<typeof removeTodoListAC>
-export type AddTodoListType = ReturnType<typeof addTodoListAC>
-type UpdateTodoListType = ReturnType<typeof updateTodoListAC>
-type ChangeFilterType = ReturnType<typeof changeFilterAC>
-
-type TsarType = RemoveTodoListType | AddTodoListType | UpdateTodoListType | ChangeFilterType
 
 export const removeTodoListAC = (todoListId: string) => {
     return {
@@ -71,4 +77,21 @@ export const changeFilterAC = (todoListId: string, value:FilterValuesType) => {
         type: 'CHANGE-FILTER-TODOLIST',
         payload: {todoListId, value}
     } as const
+}
+
+export const setTodoListAC = (todoLists: TodoListsType[]) => {
+    return {
+        type: 'SET-TODOLIST',
+        payload: {todoLists}
+    } as const
+}
+
+// Thunk - функция, которая принимает dispatch, getState
+// Предназначена для того, чтобы внутри нее делать побочные эффекты (запросы на сервер) и диспатчить action или другие thunk.
+
+export const getTodoListThunk = (dispatch: Dispatch) => {
+    todoListsAPI.getTodoLists()
+        .then((res) => {
+            dispatch(setTodoListAC(res.data))
+        })
 }

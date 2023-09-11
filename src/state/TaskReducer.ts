@@ -1,5 +1,5 @@
 import {v1} from 'uuid';
-import {AddTodoListType, RemoveTodoListType} from './TodoListReducer';
+import {AddTodoListType, RemoveTodoListType, SetTodoListType} from './TodoListReducer';
 
 // Для определения статуса таски, выполнена или нет
 export enum TaskStatuses {
@@ -35,10 +35,26 @@ export type TaskAssocType = {
     [key: string]: TasksType[]
 }
 
+type RemoveTaskType = ReturnType<typeof removeTaskAC>
+type AddTasksType = ReturnType<typeof addTaskAC>
+type UpdateTaskType = ReturnType<typeof updateTaskAC>
+type ChangeStatusTaskType = ReturnType<typeof changeStatusTaskAC>
+
+type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | ChangeStatusTaskType | AddTodoListType | RemoveTodoListType | SetTodoListType
+
 const initialState: TaskAssocType = {}
 
 export const TasksReducer = (state = initialState, action: tsarType): TaskAssocType => {
     switch (action.type) {
+        // возвращаем таски, которые наполнены на всю длину todoList
+        // когда в компоненте TodoList мэпом пробежимся по таскам, которых может и не быть, то не появится undefined, так как здесь мы подготовили заготовку для этого
+        case 'SET-TODOLIST': {
+            const copyState =  {...state}
+            action.payload.todoLists.forEach((el) => {
+                copyState[el.id] = []
+            })
+            return copyState
+        }
         case 'REMOVE-TASK': {
             return {
             ...state,
@@ -95,13 +111,6 @@ export const TasksReducer = (state = initialState, action: tsarType): TaskAssocT
             return state
     }
 }
-
-type RemoveTaskType = ReturnType<typeof removeTaskAC>
-type AddTasksType = ReturnType<typeof addTaskAC>
-type UpdateTaskType = ReturnType<typeof updateTaskAC>
-type ChangeStatusTaskType = ReturnType<typeof changeStatusTaskAC>
-
-type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | ChangeStatusTaskType | AddTodoListType | RemoveTodoListType
 
 export const removeTaskAC = (todoListId: string, taskId: string) => {
     return {
