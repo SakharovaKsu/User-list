@@ -1,6 +1,7 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {ResponseType} from './todoListsAPI'
 import {TasksType} from '../state/TaskReducer';
+import {TodoListsType} from '../state/TodoListReducer';
 
 type ResponseTaskType = {
     items: TasksType[]
@@ -25,7 +26,7 @@ export const tasksAPI = {
     },
 
     createTasks(todoID: string, title: string){
-        return instance.post<ResponseType<{ item: TasksType[] }>>(`todo-lists/${todoID}/tasks`,{title})
+        return instance.post<ResponseType<{item: TasksType}>, AxiosResponse<ResponseType<{item: TasksType}>>, {title: string}>(`todo-lists/${todoID}/tasks`,{title})
     },
 
     deleteTasks(todoID: string, taskId: string){

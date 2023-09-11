@@ -89,9 +89,11 @@ export const setTodoListAC = (todoLists: TodoListsType[]) => {
 // Thunk - функция, которая принимает dispatch, getState
 // Предназначена для того, чтобы внутри нее делать побочные эффекты (запросы на сервер) и диспатчить action или другие thunk.
 
-export const getTodoListThunk = (dispatch: Dispatch) => {
-    todoListsAPI.getTodoLists()
-        .then((res) => {
-            dispatch(setTodoListAC(res.data))
-        })
+export const getTodoListTC = () => {
+    return (dispatch: Dispatch) => {
+        todoListsAPI.getTodoLists()
+            .then((res) => {
+                dispatch(setTodoListAC(res.data))
+            })
+    }
 }

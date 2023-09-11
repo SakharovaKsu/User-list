@@ -8,7 +8,8 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {
     addTodoListAC,
-    changeFilterAC, getTodoListThunk,
+    changeFilterAC,
+    getTodoListTC,
     removeTodoListAC,
     updateTodoListAC
 } from '../state/TodoListReducer';
@@ -37,7 +38,7 @@ function AppWithRedux() {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(getTodoListThunk)
+        dispatch(getTodoListTC())
     }, [])
 
     const removeTodoList = useCallback((todoListId: string) => {

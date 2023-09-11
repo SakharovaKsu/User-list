@@ -1,5 +1,8 @@
 import {v1} from 'uuid';
-import {AddTodoListType, RemoveTodoListType, SetTodoListType} from './TodoListReducer';
+import {AddTodoListType, RemoveTodoListType, setTodoListAC, SetTodoListType} from './TodoListReducer';
+import {Dispatch} from 'redux';
+import {todoListsAPI} from '../api/todoListsAPI';
+import {tasksAPI} from '../api/tasksApi';
 
 // Для определения статуса таски, выполнена или нет
 export enum TaskStatuses {
@@ -39,8 +42,9 @@ type RemoveTaskType = ReturnType<typeof removeTaskAC>
 type AddTasksType = ReturnType<typeof addTaskAC>
 type UpdateTaskType = ReturnType<typeof updateTaskAC>
 type ChangeStatusTaskType = ReturnType<typeof changeStatusTaskAC>
+type SetTasksType = ReturnType<typeof setTasksAC>
 
-type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | ChangeStatusTaskType | AddTodoListType | RemoveTodoListType | SetTodoListType
+type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | ChangeStatusTaskType | AddTodoListType | RemoveTodoListType | SetTodoListType | SetTasksType
 
 const initialState: TaskAssocType = {}
 
@@ -50,10 +54,15 @@ export const TasksReducer = (state = initialState, action: tsarType): TaskAssocT
         // когда в компоненте TodoList мэпом пробежимся по таскам, которых может и не быть, то не появится undefined, так как здесь мы подготовили заготовку для этого
         case 'SET-TODOLIST': {
             const copyState =  {...state}
+
+            // через forEach пробегаем по всем туду листам и добавляем пустой массив тасок
             action.payload.todoLists.forEach((el) => {
                 copyState[el.id] = []
             })
             return copyState
+        }
+        case 'SET-TASKS': {
+            return {...state, [action.payload.todoID]: action.payload.tasks}
         }
         case 'REMOVE-TASK': {
             return {
@@ -138,4 +147,20 @@ export const changeStatusTaskAC = (todoListId: string, taskID: string, status: T
         type: 'CHANGE-STATUS-TASK',
         payload: {todoListId, taskID, status}
     } as const
+}
+
+export const setTasksAC = (todoID: string, tasks: TasksType[]) => {
+   return {
+       type: 'SET-TASKS',
+       payload: {todoID, tasks}
+   } as const
+}
+
+export const getTasksTC = (todoID: string) => {
+    return (dispatch: Dispatch) => {
+        tasksAPI.getTasks(todoID)
+            .then((res) => {
+                dispatch(setTasksAC(todoID, res.data.items))
+            })
+    }
 }

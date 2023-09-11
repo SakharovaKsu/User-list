@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {TodoListsType} from '../state/TodoListReducer';
 
 // в дженерик T (<T>) может прийти пустой объект или TodoListsType, или еще что.
@@ -29,12 +29,15 @@ const instance = axios.create({
 export const todoListsAPI = {
 
     getTodoLists() {
-        // В get придет <Array<TodoListsType>> (массив туду листов)
+        // В get придет <TodoListsType[]> (массив туду листов)
         return instance.get<TodoListsType[]>('todo-lists')
     },
 
     createTodolist(title: string){
-        return instance.post<ResponseType<{item: TodoListsType}>>('todo-lists',{title})
+
+        // если 1ым параметром передам null, то ничего не сломается, потому что 1 аргумент игнорируется и не важно что туда передаем, так как используется 2-ой тип (AxiosResponse)
+        // если оставляю один тип, то на него и ориентируется, но зачем передавать три типа? 3-ий тип типизирует то, что мы передаем на бэкенд. И что бы он увидел (3ий аргумент) необходимо передать два типа
+        return instance.post<ResponseType<{item: TodoListsType}>, AxiosResponse<ResponseType<{item: TodoListsType}>>, {title: string}>('todo-lists',{title})
     },
 
     deleteTodolist(todoID: string){
@@ -42,6 +45,6 @@ export const todoListsAPI = {
     },
 
     updateTodolistTitle(todoID: string, title: string){
-        return instance.put<ResponseType>(`todo-lists/${todoID}`,{title})
+        return instance.put<ResponseType, AxiosResponse<ResponseType>, {title: string}>(`todo-lists/${todoID}`,{title})
     }
 }
