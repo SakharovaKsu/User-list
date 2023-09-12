@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {tasksAPI} from './tasksApi';
+import {TaskStatuses, TodoTaskPriority, UpdateTaskModuleType} from '../state/TaskReducer';
 
 export default {
     title: 'API Tasks'
@@ -60,10 +61,17 @@ export const UpdateTasks = () => {
     const [state, setState] = useState<any>(null)
     const todoID = '53980526-da03-4ec7-9061-1752f9f124f0'
     const taskID = ''
-    const title = 'REACT'
+    const model: UpdateTaskModuleType = {
+        title: 'React',
+        description: '',
+        startDate: '',
+        priority: TodoTaskPriority.Hi,
+        deadline: '',
+        status: TaskStatuses.Completed
+    }
 
     useEffect(() => {
-        tasksAPI.updateTasks(todoID, taskID, title)
+        tasksAPI.updateTasks(todoID, taskID, model)
             .then((res) => {
                 setState(res.data)
             })

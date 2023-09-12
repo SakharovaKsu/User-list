@@ -1,8 +1,7 @@
-import {v1} from 'uuid';
-import {AddTodoListType, RemoveTodoListType, setTodoListAC, SetTodoListType} from './TodoListReducer';
+import {AddTodoListType, RemoveTodoListType, SetTodoListType} from './TodoListReducer';
 import {Dispatch} from 'redux';
-import {todoListsAPI} from '../api/todoListsAPI';
 import {tasksAPI} from '../api/tasksApi';
+import {AppRootStateType} from './store';
 
 // Для определения статуса таски, выполнена или нет
 export enum TaskStatuses {
@@ -18,6 +17,15 @@ export enum TodoTaskPriority {
     Hi = 2,
     Urgently = 3,
     Later = 4
+}
+
+export type UpdateTaskModuleType = {
+    title: string
+    description: string
+    status: TaskStatuses
+    priority: TodoTaskPriority
+    startDate: string
+    deadline: string
 }
 
 export type TasksType = {
@@ -164,8 +172,37 @@ export const addTaskTC = (todoID: string, title: string) => {
     return (dispatch: Dispatch) => {
         tasksAPI.createTasks(todoID, title)
             .then((res) => {
-                debugger
                 dispatch(addTaskAC(res.data.data.item))
             })
+    }
+}
+
+export const changeStatusTaskTC = (todoID: string, taskID: string,  status: TaskStatuses) => {
+    return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+
+        // получаем таску из стейта, по id находим нужный массив, пробегаемся по массиву с поисками нужного id таски
+        const task = getState().tasks[todoID].find(t => t.id === taskID)
+
+        // если есть таска, то ее собираем
+        if(task) {
+            const newStatus: Record<number, number> = {
+                [TaskStatuses.New] : TaskStatuses.Completed,
+                [TaskStatuses.Completed] : TaskStatuses.New,
+            }
+
+            const model: UpdateTaskModuleType = {
+                title: task.title,
+                description: task.description,
+                startDate: task.startDate,
+                priority: task.priority,
+                deadline: task.deadline,
+                status: newStatus[task.status]
+            }
+
+            tasksAPI.updateTasks(todoID, taskID, model)
+                .then((res) => {
+                    dispatch(changeStatusTaskAC(todoID, taskID, status))
+                })
+        }
     }
 }

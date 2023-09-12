@@ -16,9 +16,10 @@ type TasksPropsType = {
     task: TasksType
     todolistId: string
     removeTask: (todoListId: string, taskId: string) => void
+    changeStatus: (todoListId: string, taskID: string, status: TaskStatuses) => void
 }
 
-export const TaskWithRedux: FC<TasksPropsType> = memo(({ task, todolistId, removeTask}) => {
+export const TaskWithRedux: FC<TasksPropsType> = memo(({ task, todolistId, removeTask, changeStatus}) => {
 
     const dispatch = useDispatch()
 
@@ -27,7 +28,8 @@ export const TaskWithRedux: FC<TasksPropsType> = memo(({ task, todolistId, remov
     const changeStatusTask = useCallback((e:ChangeEvent<HTMLInputElement>) => {
 
         const newIsDoneValue = e.currentTarget.checked
-        dispatch(changeStatusTaskAC(todolistId, task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New))
+        changeStatus(todolistId, task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New)
+        // dispatch(changeStatusTaskAC(todolistId, task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New))
 
     },[todolistId, task.id])
 

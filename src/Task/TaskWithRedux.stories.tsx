@@ -4,7 +4,14 @@ import React, {useCallback} from 'react';
 import {ReduxStoreProviderDecorator} from '../state/ReduxStoreProviderDecorator';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../state/store';
-import {removeTaskAC, removeTaskTC, TasksType} from '../state/TaskReducer';
+import {
+    changeStatusTaskAC,
+    changeStatusTaskTC,
+    removeTaskAC,
+    removeTaskTC,
+    TaskStatuses,
+    TasksType
+} from '../state/TaskReducer';
 import {removeTodoListAC} from '../state/TodoListReducer';
 
 
@@ -39,7 +46,11 @@ const TaskComponent = () => {
         dispatch(removeTaskAC(todoListId, taskId))
     }, [dispatch])
 
-    return <TaskWithRedux task={task} todolistId={'todolistId1'} removeTask={removeTask}/>
+    const changeStatus = useCallback((todoListId: string, taskID: string, status: TaskStatuses) => {
+        dispatch(changeStatusTaskAC(todoListId, taskID, status))
+    }, [dispatch])
+
+    return <TaskWithRedux task={task} todolistId={'todolistId1'} removeTask={removeTask} changeStatus={changeStatus}/>
 }
 
 export const TaskWithReduxStory: Story = {

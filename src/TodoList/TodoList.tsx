@@ -33,6 +33,7 @@ const TodoList: FC<TodoListPropsType> = memo(({
     filter,
     removeTodoList,
     removeTask,
+    changeStatus,
     updateTodoList}) => {
 
     const dispatch = useAppDispatch()
@@ -71,7 +72,7 @@ const TodoList: FC<TodoListPropsType> = memo(({
     // вопрос ставим перед map для проверки, что б не вылетала ошибка когда нет тасок
     const tasksJSX:Array<JSX.Element> = tasks?.map((t) => {
         return (
-            <TaskWithRedux key={t.id} task={t} todolistId={todoListId} removeTask={removeTask}/>
+            <TaskWithRedux key={t.id} task={t} todolistId={todoListId} removeTask={removeTask} changeStatus={changeStatus}/>
         )
     })
 
