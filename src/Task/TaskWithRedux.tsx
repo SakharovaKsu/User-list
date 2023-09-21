@@ -4,24 +4,17 @@ import Checkbox from '@mui/material/Checkbox';
 import EditableSpan from '../EditableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useDispatch} from 'react-redux';
-import {
-    changeStatusTaskAC,
-    TaskStatuses,
-    TasksType,
-    updateTaskAC
-} from '../state/TaskReducer';
+import {TaskStatuses, TasksType,} from '../state/TaskReducer';
 
 type TasksPropsType = {
     task: TasksType
     todolistId: string
     removeTask: (todoListId: string, taskId: string) => void
     changeStatus: (todoListId: string, taskID: string, status: TaskStatuses) => void
+    updateTask: (todoListId: string, taskId: string, updateTitle: string) => void
 }
 
-export const TaskWithRedux: FC<TasksPropsType> = memo(({ task, todolistId, removeTask, changeStatus}) => {
-
-    const dispatch = useDispatch()
+export const TaskWithRedux: FC<TasksPropsType> = memo(({ task, todolistId, removeTask, changeStatus, updateTask}) => {
 
     const removeTaskHandler = useCallback(() => removeTask(todolistId, task.id), [todolistId, task.id])
 
@@ -29,19 +22,18 @@ export const TaskWithRedux: FC<TasksPropsType> = memo(({ task, todolistId, remov
 
         const newIsDoneValue = e.currentTarget.checked
         changeStatus(todolistId, task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New)
-        // dispatch(changeStatusTaskAC(todolistId, task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New))
 
     },[todolistId, task.id])
 
-    const updateTask = useCallback((updateTitle: string) => {
-        dispatch(updateTaskAC(todolistId, task.id, updateTitle))
+    const updateTitle = useCallback((updateTitle: string) => {
+        updateTask(todolistId, task.id, updateTitle)
     }, [todolistId, task.id])
 
     return (
         <div className={task.status === TaskStatuses.Completed ? s.status : ''}>
             {/* если чекнуто, то статус ставим Completed */}
             <Checkbox checked={task.status === TaskStatuses.Completed} color="success" onChange={changeStatusTask}/>
-            <EditableSpan oldTitle={task.title} callback={updateTask}/>
+            <EditableSpan oldTitle={task.title} callback={updateTitle}/>
             <IconButton aria-label="delete" color="success" onClick={removeTaskHandler}>
                 <DeleteIcon />
             </IconButton>

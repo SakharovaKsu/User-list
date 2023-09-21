@@ -6,22 +6,8 @@ import ButtonAppBar from '../ButtonAppBar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {
-    addTodoListAC, addTodoListTC,
-    changeFilterAC,
-    getTodoListTC,
-    removeTodoListAC, removeTodoListTC,
-    updateTodoListAC, updateTodoLostTC
-} from '../state/TodoListReducer';
-import {
-    addTaskAC, addTaskTC,
-    changeStatusTaskAC, changeStatusTaskTC,
-    removeTaskAC,
-    removeTaskTC,
-    TaskStatuses,
-    TasksType,
-    updateTaskAC
-} from '../state/TaskReducer';
+import {addTodoListTC, changeFilterAC, getTodoListTC, removeTodoListTC, updateTodoLostTC} from '../state/TodoListReducer';
+import {addTaskTC, changeStatusTaskTC, removeTaskTC, TaskStatuses, TasksType, updateTaskTC} from '../state/TaskReducer';
 import {useSelector} from 'react-redux';
 import {AppRootStateType, useAppDispatch} from '../state/store';
 
@@ -79,7 +65,7 @@ function AppWithRedux() {
     }, [dispatch])
 
     const updateTask = useCallback((todoListId: string, taskId: string, updateTitle: string) => {
-        dispatch(updateTaskAC(todoListId, taskId, updateTitle))
+        dispatch(updateTaskTC(todoListId, taskId, {title: updateTitle}))
     }, [dispatch])
 
     const changeStatus = useCallback((todoListId: string, taskID: string, status: TaskStatuses) => {
@@ -102,7 +88,6 @@ function AppWithRedux() {
                                 <Paper style={{padding: '20px'}}>
                                     <TodoList
                                         key={tl.id}
-                                        updateTask={updateTask}
                                         updateTodoList={updateTodoList}
                                         todoListId={tl.id}
                                         tasks={tasks[tl.id]}
@@ -111,6 +96,7 @@ function AppWithRedux() {
                                         changeFilter={changeFilter}
                                         addTask={addTask}
                                         changeStatus={changeStatus}
+                                        updateTask={updateTask}
                                         filter={tl.filter}
                                         removeTodoList={removeTodoList}
                                     />

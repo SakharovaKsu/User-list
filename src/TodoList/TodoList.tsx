@@ -6,8 +6,8 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {ButtonWithMemo} from '../ButtonWithMemo';
 import {TaskWithRedux} from '../Task/TaskWithRedux';
-import {getTasksTC, removeTaskTC, TaskStatuses, TasksType} from '../state/TaskReducer';
-import {FilterValuesType, getTodoListTC} from '../state/TodoListReducer';
+import {getTasksTC, TaskStatuses, TasksType} from '../state/TaskReducer';
+import {FilterValuesType} from '../state/TodoListReducer';
 import {useAppDispatch} from '../state/store';
 
 type TodoListPropsType = {
@@ -34,7 +34,8 @@ const TodoList: FC<TodoListPropsType> = memo(({
     removeTodoList,
     removeTask,
     changeStatus,
-    updateTodoList}) => {
+    updateTodoList,
+    updateTask}) => {
 
     const dispatch = useAppDispatch()
 
@@ -72,7 +73,12 @@ const TodoList: FC<TodoListPropsType> = memo(({
     // вопрос ставим перед map для проверки, что б не вылетала ошибка когда нет тасок
     const tasksJSX:Array<JSX.Element> = tasks?.map((t) => {
         return (
-            <TaskWithRedux key={t.id} task={t} todolistId={todoListId} removeTask={removeTask} changeStatus={changeStatus}/>
+            <TaskWithRedux key={t.id}
+                           task={t}
+                           todolistId={todoListId}
+                           removeTask={removeTask}
+                           changeStatus={changeStatus}
+                           updateTask={updateTask}/>
         )
     })
 

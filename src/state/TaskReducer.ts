@@ -19,14 +19,14 @@ export enum TodoTaskPriority {
     Later = 4
 }
 
-export type UpdateTaskModuleType = {
+export type UpdateTaskModuleType = Partial<{
     title: string
     description: string
     status: TaskStatuses
     priority: TodoTaskPriority
     startDate: string
     deadline: string
-}
+}>
 
 export type TasksType = {
     description: string
@@ -92,8 +92,8 @@ export const TasksReducer = (state = initialState, action: tsarType): TaskAssocT
             return {
                 ...state,
                 [action.payload.todoListId]: state[action.payload.todoListId]
-                    .map(t => t.id === action.payload.taskId ? {...t,
-                        title: action.payload.updateTitle} : t)}
+                    .map(t => t.id === action.payload.taskId ? {...t, ...action.payload.model} : t)
+            }
         }
         case 'CHANGE-STATUS-TASK': {
             // tasks.map(el => el.id === taskID ? {...el, isDone: checkedValue} : el) // делаем копию через map (массива и всех объектов), ищем id (а можем и не найти, то ничего не возвращает), если нашла - копируем объект (...el). и перезаписываем isDone: checkedValue. Он перезапишется так как старое значение будет совпадать по названию с новым
@@ -129,10 +129,10 @@ export const addTaskAC = (task: TasksType) => {
     } as const
 }
 
-export const updateTaskAC = (todoListId: string, taskId: string, updateTitle: string) => {
+export const updateTaskAC = (todoListId: string, taskId: string, model: UpdateTaskModuleType) => {
     return {
         type: 'UPDATE-TASK',
-        payload: {todoListId, taskId, updateTitle}
+        payload: {todoListId, taskId, model}
     } as const
 }
 
@@ -206,3 +206,24 @@ export const changeStatusTaskTC = (todoID: string, taskID: string,  status: Task
         }
     }
 }
+
+export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateTaskModuleType ) =>
+    (dispatch: Dispatch, getState: () => AppRootStateType) => {
+        const state = getState()
+        const task = state.tasks[todolistId].find(t => t.id === taskId)
+        if (!task) {
+            //throw new Error("task not found in the state");
+            console.warn('task not found in the state')
+            return
+        }
+
+        const apiModel: UpdateTaskModuleType = {
+            ...domainModel,
+        }
+
+        tasksAPI.updateTasks(todolistId, taskId, apiModel)
+            .then(res => {
+                const action = updateTaskAC(todolistId, taskId, apiModel)
+                dispatch(action)
+            })
+    }

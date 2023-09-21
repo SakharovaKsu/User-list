@@ -10,7 +10,7 @@ import {
     removeTaskAC,
     removeTaskTC,
     TaskStatuses,
-    TasksType
+    TasksType, updateTaskAC, UpdateTaskModuleType
 } from '../state/TaskReducer';
 import {removeTodoListAC} from '../state/TodoListReducer';
 
@@ -50,7 +50,12 @@ const TaskComponent = () => {
         dispatch(changeStatusTaskAC(todoListId, taskID, status))
     }, [dispatch])
 
-    return <TaskWithRedux task={task} todolistId={'todolistId1'} removeTask={removeTask} changeStatus={changeStatus}/>
+    const updateTask = useCallback((todolistId: string, taskId: string, updateTitle: string) => {
+        dispatch(updateTaskAC(todolistId, taskId, {title: updateTitle}))
+    }, [dispatch])
+
+    return <TaskWithRedux task={task} todolistId={'todolistId1'} removeTask={removeTask} changeStatus={changeStatus}
+                          updateTask={updateTask}/>
 }
 
 export const TaskWithReduxStory: Story = {
