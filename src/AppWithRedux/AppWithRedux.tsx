@@ -7,7 +7,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {addTodoListTC, changeFilterAC, getTodoListTC, removeTodoListTC, updateTodoLostTC} from '../state/TodoListReducer';
-import {addTaskTC, changeStatusTaskTC, removeTaskTC, TaskStatuses, TasksType, updateTaskTC} from '../state/TaskReducer';
+import {addTaskTC, removeTaskTC, TaskStatuses, TasksType, updateTaskTC} from '../state/TaskReducer';
 import {useSelector} from 'react-redux';
 import {AppRootStateType, useAppDispatch} from '../state/store';
 
@@ -69,7 +69,7 @@ function AppWithRedux() {
     }, [dispatch])
 
     const changeStatus = useCallback((todoListId: string, taskID: string, status: TaskStatuses) => {
-        dispatch(changeStatusTaskTC(todoListId, taskID, status))
+        dispatch(updateTaskTC(todoListId, taskID, {status: status}))
     }, [dispatch])
 
     return (

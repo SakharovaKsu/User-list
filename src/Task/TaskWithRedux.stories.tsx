@@ -5,14 +5,10 @@ import {ReduxStoreProviderDecorator} from '../state/ReduxStoreProviderDecorator'
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../state/store';
 import {
-    changeStatusTaskAC,
-    changeStatusTaskTC,
     removeTaskAC,
-    removeTaskTC,
     TaskStatuses,
-    TasksType, updateTaskAC, UpdateTaskModuleType
+    TasksType, updateTaskAC
 } from '../state/TaskReducer';
-import {removeTodoListAC} from '../state/TodoListReducer';
 
 
 const meta: Meta<typeof TaskWithRedux> = {
@@ -47,7 +43,7 @@ const TaskComponent = () => {
     }, [dispatch])
 
     const changeStatus = useCallback((todoListId: string, taskID: string, status: TaskStatuses) => {
-        dispatch(changeStatusTaskAC(todoListId, taskID, status))
+        dispatch(updateTaskAC(todoListId, taskID, {status}))
     }, [dispatch])
 
     const updateTask = useCallback((todolistId: string, taskId: string, updateTitle: string) => {

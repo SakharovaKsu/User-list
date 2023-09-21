@@ -1,7 +1,6 @@
 import {v1} from 'uuid';
 import {
     addTaskAC,
-    changeStatusTaskAC,
     removeTaskAC,
     TaskAssocType,
     TasksReducer,
@@ -111,7 +110,7 @@ test ('should change the status in tasks', () => {
 
     const taskID = defTasks['todolistId1'][0].id
 
-    const action = changeStatusTaskAC('todolistId1', taskID, TaskStatuses.New)
+    const action = updateTaskAC('todolistId1', taskID, {status: TaskStatuses.New})
     const endTask = TasksReducer(defTasks, action)
 
     expect(endTask['todolistId1'][0].status).toBe(TaskStatuses.New)

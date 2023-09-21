@@ -49,10 +49,9 @@ export type TaskAssocType = {
 type RemoveTaskType = ReturnType<typeof removeTaskAC>
 type AddTasksType = ReturnType<typeof addTaskAC>
 type UpdateTaskType = ReturnType<typeof updateTaskAC>
-type ChangeStatusTaskType = ReturnType<typeof changeStatusTaskAC>
 type SetTasksType = ReturnType<typeof setTasksAC>
 
-type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | ChangeStatusTaskType | AddTodoListType | RemoveTodoListType | SetTodoListType | SetTasksType
+type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | AddTodoListType | RemoveTodoListType | SetTodoListType | SetTasksType
 
 const initialState: TaskAssocType = {}
 
@@ -85,8 +84,6 @@ export const TasksReducer = (state = initialState, action: tsarType): TaskAssocT
             } else {
                 return {...state, [action.payload.task.todoListId as string]: [action.payload.task]}
             }
-
-
         }
         case 'UPDATE-TASK': {
             return {
@@ -94,12 +91,6 @@ export const TasksReducer = (state = initialState, action: tsarType): TaskAssocT
                 [action.payload.todoListId]: state[action.payload.todoListId]
                     .map(t => t.id === action.payload.taskId ? {...t, ...action.payload.model} : t)
             }
-        }
-        case 'CHANGE-STATUS-TASK': {
-            // tasks.map(el => el.id === taskID ? {...el, isDone: checkedValue} : el) // делаем копию через map (массива и всех объектов), ищем id (а можем и не найти, то ничего не возвращает), если нашла - копируем объект (...el). и перезаписываем isDone: checkedValue. Он перезапишется так как старое значение будет совпадать по названию с новым
-
-            return {...state, [action.payload.todoListId]: state[action.payload.todoListId]
-                    .map(t => t.id === action.payload.taskID ? {...t, status: action.payload.status} : t)}
         }
         case 'ADD-TODOLIST': {
             return {...state, [action.payload.todoListId] : []}
@@ -133,13 +124,6 @@ export const updateTaskAC = (todoListId: string, taskId: string, model: UpdateTa
     return {
         type: 'UPDATE-TASK',
         payload: {todoListId, taskId, model}
-    } as const
-}
-
-export const changeStatusTaskAC = (todoListId: string, taskID: string, status: TaskStatuses) => {
-    return {
-        type: 'CHANGE-STATUS-TASK',
-        payload: {todoListId, taskID, status}
     } as const
 }
 
@@ -177,53 +161,33 @@ export const addTaskTC = (todoID: string, title: string) => {
     }
 }
 
-export const changeStatusTaskTC = (todoID: string, taskID: string,  status: TaskStatuses) => {
-    return (dispatch: Dispatch, getState: () => AppRootStateType) => {
-
-        // получаем таску из стейта, по id находим нужный массив, пробегаемся по массиву с поисками нужного id таски
-        const task = getState().tasks[todoID].find(t => t.id === taskID)
-
-        // если есть таска, то ее собираем
-        if(task) {
-            const newStatus: Record<number, number> = {
-                [TaskStatuses.New] : TaskStatuses.Completed,
-                [TaskStatuses.Completed] : TaskStatuses.New,
-            }
-
-            const model: UpdateTaskModuleType = {
-                title: task.title,
-                description: task.description,
-                startDate: task.startDate,
-                priority: task.priority,
-                deadline: task.deadline,
-                status: newStatus[task.status]
-            }
-
-            tasksAPI.updateTasks(todoID, taskID, model)
-                .then((res) => {
-                    dispatch(changeStatusTaskAC(todoID, taskID, status))
-                })
-        }
-    }
-}
-
 export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateTaskModuleType ) =>
     (dispatch: Dispatch, getState: () => AppRootStateType) => {
-        const state = getState()
-        const task = state.tasks[todolistId].find(t => t.id === taskId)
+
+        const task = getState().tasks[todolistId].find(t => t.id === taskId)
         if (!task) {
             //throw new Error("task not found in the state");
             console.warn('task not found in the state')
             return
         }
 
+        const newStatus: Record<number, number> = {
+            [TaskStatuses.New] : TaskStatuses.Completed,
+            [TaskStatuses.Completed] : TaskStatuses.New,
+        }
+
         const apiModel: UpdateTaskModuleType = {
             ...domainModel,
+            title: task.title,
+            description: task.description,
+            startDate: task.startDate,
+            priority: task.priority,
+            deadline: task.deadline,
+            status: newStatus[task.status]
         }
 
         tasksAPI.updateTasks(todolistId, taskId, apiModel)
             .then(res => {
-                const action = updateTaskAC(todolistId, taskId, apiModel)
-                dispatch(action)
+                dispatch(updateTaskAC(todolistId, taskId, apiModel))
             })
     }
