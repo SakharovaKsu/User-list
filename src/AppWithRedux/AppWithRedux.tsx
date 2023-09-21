@@ -7,11 +7,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {
-    addTodoListAC,
+    addTodoListAC, addTodoListTC,
     changeFilterAC,
     getTodoListTC,
-    removeTodoListAC,
-    updateTodoListAC
+    removeTodoListAC, removeTodoListTC,
+    updateTodoListAC, updateTodoLostTC
 } from '../state/TodoListReducer';
 import {
     addTaskAC, addTaskTC,
@@ -51,17 +51,18 @@ function AppWithRedux() {
     }, [])
 
     const removeTodoList = useCallback((todoListId: string) => {
-        dispatch(removeTodoListAC(todoListId))
+        dispatch(removeTodoListTC(todoListId))
     }, [dispatch])
 
     // добавление нового тудулиста
     const addTodoList = useCallback((newTitle: string) => {
-        dispatch(addTodoListAC(newTitle))
+        dispatch(addTodoListTC(newTitle))
     }, [dispatch])
 
     // id всегда слева первая
     const updateTodoList =  useCallback((todoListId: string, updateTitle: string) => {
-        dispatch(updateTodoListAC(todoListId, updateTitle))
+        dispatch(updateTodoLostTC(todoListId, updateTitle))
+        // dispatch(updateTodoListAC(todoListId, updateTitle))
     }, [dispatch])
 
     const changeFilter =  useCallback((todoListId: string, value:FilterValuesType) => {

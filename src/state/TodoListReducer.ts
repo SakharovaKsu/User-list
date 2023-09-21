@@ -97,3 +97,30 @@ export const getTodoListTC = () => {
             })
     }
 }
+
+export const removeTodoListTC = (todoID: string) => {
+    return (dispatch: Dispatch) => {
+        todoListsAPI.deleteTodolist(todoID)
+            .then((res) => {
+                dispatch(removeTodoListAC(todoID))
+            })
+    }
+}
+
+export const addTodoListTC = (newTitle: string) => {
+    return (dispatch: Dispatch) => {
+        todoListsAPI.createTodolist(newTitle)
+            .then(res => {
+                dispatch(addTodoListAC(newTitle))
+            })
+    }
+}
+
+export const updateTodoLostTC = (todoID: string, updateTitle: string) => {
+    return (dispatch: Dispatch) => {
+        todoListsAPI.updateTodolistTitle(todoID, updateTitle)
+            .then(res => {
+                dispatch(updateTodoListAC(todoID, updateTitle))
+            })
+    }
+}
