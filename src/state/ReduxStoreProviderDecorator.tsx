@@ -3,15 +3,17 @@ import {Provider} from "react-redux";
 import {AppRootStateType} from './store';
 import {combineReducers,  legacy_createStore} from "redux";
 import {v1} from "uuid";
-import {TasksReducer, TaskStatuses, TodoTaskPriority} from './TaskReducer';
-import {TodoListReducer} from './TodoListReducer';
+import {tasksReducer, TaskStatuses, TodoTaskPriority} from './TaskReducer';
+import {todoListReducer} from './TodoListReducer';
+import {appReducer} from './AppReducer';
 
 // Это декоратор для сторибука для компонентов где используется редакс
 // Пишем что-то наподобие HOC
 
 const rootReducer = combineReducers({
-    tasks: TasksReducer,
-    todoLists: TodoListReducer
+    tasks: tasksReducer,
+    todoLists: todoListReducer,
+    app: appReducer
 })
 
 const initialGlobalState: AppRootStateType = {
@@ -46,7 +48,8 @@ const initialGlobalState: AppRootStateType = {
                 deadline: '', todoListId: 'todoListId2', order: 0, addedDate: ''
             }
         ]
-    }
+    },
+    app: {status: 'loading'}
 };
 
 export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState);

@@ -1,5 +1,5 @@
-import {addTodoListAC, removeTodoListAC, TodoListReducer, TodoListEntityType} from './TodoListReducer';
-import {TaskAssocType, TasksReducer, TaskStatuses, TodoTaskPriority} from './TaskReducer';
+import {addTodoListAC, removeTodoListAC, todoListReducer, TodoListEntityType} from './TodoListReducer';
+import {TaskAssocType, tasksReducer, TaskStatuses, TodoTaskPriority} from './TaskReducer';
 
 let startState: TaskAssocType
 
@@ -48,8 +48,8 @@ test('ids should be equals', () => {
 
     const action = addTodoListAC('new todolist')
 
-    const endTasksState = TasksReducer(startTasksState, action)
-    const endTodolistsState = TodoListReducer(startTodolistsState, action)
+    const endTasksState = tasksReducer(startTasksState, action)
+    const endTodolistsState = todoListReducer(startTodolistsState, action)
 
     const keys = Object.keys(endTasksState)
     const idFromTasks = keys[0]
@@ -63,7 +63,7 @@ test('property with todolistId should be deleted', () => {
 
     const action = removeTodoListAC('todolistId2')
 
-    const endState = TasksReducer(startState, action)
+    const endState = tasksReducer(startState, action)
 
 
     const keys = Object.keys(endState)

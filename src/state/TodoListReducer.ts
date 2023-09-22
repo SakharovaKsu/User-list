@@ -1,6 +1,7 @@
 import {v1} from 'uuid';
 import {todoListsAPI} from '../api/todoListsAPI';
 import {Dispatch} from 'redux';
+import {setAppStatusAC, SetStatusType} from './AppReducer';
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 type FilterType = {
@@ -22,12 +23,12 @@ type UpdateTodoListType = ReturnType<typeof updateTodoListAC>
 type ChangeFilterType = ReturnType<typeof changeFilterAC>
 export type SetTodoListType = ReturnType<typeof setTodoListAC>
 
-type TsarType = RemoveTodoListType | AddTodoListType | UpdateTodoListType | ChangeFilterType | SetTodoListType
+type TsarType = RemoveTodoListType | AddTodoListType | UpdateTodoListType | ChangeFilterType | SetTodoListType | SetStatusType
 
 // С первым системным экшеном, который редакс диспатчит\отправляет в наши редьюсеры стейт не приходит. Он равен undefined, его нет, потому что жизнь только зарождается, поэтому пишем для state значение по умолчанию
 const initialState:TodoListEntityType[] = []
 
-export const TodoListReducer = (state = initialState, action: TsarType): TodoListEntityType[] => {
+export const todoListReducer = (state = initialState, action: TsarType): TodoListEntityType[] => {
     switch (action.type) {
         case 'SET-TODOLIST': {
             return action.payload.todoLists.map(tl => ({...tl, filter: 'all'}))
@@ -51,76 +52,61 @@ export const TodoListReducer = (state = initialState, action: TsarType): TodoLis
     }
 }
 
-export const removeTodoListAC = (todoListId: string) => {
-    return {
-        type: 'REMOVE-TODOLIST',
-        payload: {todoListId}
-    } as const
-}
-
-export const addTodoListAC = (newTitle: string) => {
-    return {
-        type: 'ADD-TODOLIST',
-        payload: {newTitle, todoListId: v1()}
-    } as const
-}
-
-export const updateTodoListAC = (todoListId: string, updateTitle: string) => {
-    return {
-        type: 'UPDATE-TODOLIST-TITLE',
-        payload: {todoListId, updateTitle}
-    } as const
-}
-
-export const changeFilterAC = (todoListId: string, value:FilterValuesType) => {
-    return {
-        type: 'CHANGE-FILTER-TODOLIST',
-        payload: {todoListId, value}
-    } as const
-}
-
-export const setTodoListAC = (todoLists: TodoListsType[]) => {
-    return {
-        type: 'SET-TODOLIST',
-        payload: {todoLists}
-    } as const
-}
+export const removeTodoListAC = (todoListId: string) => ({type: 'REMOVE-TODOLIST', payload: {todoListId}} as const)
+export const addTodoListAC = (newTitle: string) => ({type: 'ADD-TODOLIST', payload: {newTitle, todoListId: v1()}} as const)
+export const updateTodoListAC = (todoListId: string, updateTitle: string) => ({type: 'UPDATE-TODOLIST-TITLE', payload: {todoListId, updateTitle}} as const)
+export const changeFilterAC = (todoListId: string, value:FilterValuesType) => ({type: 'CHANGE-FILTER-TODOLIST', payload: {todoListId, value}} as const)
+export const setTodoListAC = (todoLists: TodoListsType[]) => ({type: 'SET-TODOLIST', payload: {todoLists}} as const)
 
 // Thunk - функция, которая принимает dispatch, getState
 // Предназначена для того, чтобы внутри нее делать побочные эффекты (запросы на сервер) и диспатчить action или другие thunk.
 
 export const getTodoListTC = () => {
-    return (dispatch: Dispatch) => {
+    return (dispatch: Dispatch<TsarType>) => {
+        dispatch(setAppStatusAC('loading'))
         todoListsAPI.getTodoLists()
             .then((res) => {
                 dispatch(setTodoListAC(res.data))
+            })
+            .catch(() => {})
+            .finally(() => {
+                dispatch(setAppStatusAC('idle'))
             })
     }
 }
 
 export const removeTodoListTC = (todoID: string) => {
-    return (dispatch: Dispatch) => {
+    return (dispatch: Dispatch<TsarType>) => {
+        dispatch(setAppStatusAC('loading'))
         todoListsAPI.deleteTodolist(todoID)
             .then((res) => {
                 dispatch(removeTodoListAC(todoID))
+                dispatch(setAppStatusAC('idle'))
             })
+            .catch(() => {})
     }
 }
 
 export const addTodoListTC = (newTitle: string) => {
-    return (dispatch: Dispatch) => {
+    return (dispatch: Dispatch<TsarType>) => {
+        dispatch(setAppStatusAC('loading'))
         todoListsAPI.createTodolist(newTitle)
             .then(res => {
                 dispatch(addTodoListAC(newTitle))
+                dispatch(setAppStatusAC('idle'))
             })
+            .catch(() => {})
     }
 }
 
 export const updateTodoLostTC = (todoID: string, updateTitle: string) => {
-    return (dispatch: Dispatch) => {
+    return (dispatch: Dispatch<TsarType>) => {
+        dispatch(setAppStatusAC('loading'))
         todoListsAPI.updateTodolistTitle(todoID, updateTitle)
             .then(res => {
                 dispatch(updateTodoListAC(todoID, updateTitle))
+                dispatch(setAppStatusAC('idle'))
             })
+            .catch(() => {})
     }
 }

@@ -3,7 +3,7 @@ import {
     addTaskAC,
     removeTaskAC,
     TaskAssocType,
-    TasksReducer,
+    tasksReducer,
     TaskStatuses,
     TodoTaskPriority,
     updateTaskAC
@@ -66,7 +66,7 @@ test ('removing a task from the list', () => {
     const taskID = defTasks['todolistId1'][0].id
 
     const action = removeTaskAC('todolistId1', taskID)
-    const endTask = TasksReducer(defTasks, action)
+    const endTask = tasksReducer(defTasks, action)
 
     expect(endTask['todolistId1'].length).toBe(3)
     expect(endTask['todolistId1'][0].title).toBe('JS')
@@ -88,7 +88,7 @@ test ('there should be a new task', () => {
     }
 
     const action = addTaskAC(newTask)
-    const endTask = TasksReducer(defTasks, action)
+    const endTask = tasksReducer(defTasks, action)
 
     expect(endTask['todolistId1'].length).toBe(5)
     expect(endTask['todolistId1'][0].title).toBe('Vue')
@@ -100,7 +100,7 @@ test ('should change the title in the task', () => {
     const taskID = defTasks['todolistId1'][0].id
 
     const action = updateTaskAC('todolistId1', taskID, {title: 'CSS'})
-    const endTask = TasksReducer(defTasks, action)
+    const endTask = tasksReducer(defTasks, action)
 
     expect(endTask['todolistId1'][0].title).toBe('CSS')
     expect(endTask['todolistId1'][0].title).not.toBe(defTasks['todolistId1'][0].title)
@@ -111,7 +111,7 @@ test ('should change the status in tasks', () => {
     const taskID = defTasks['todolistId1'][0].id
 
     const action = updateTaskAC('todolistId1', taskID, {status: TaskStatuses.New})
-    const endTask = TasksReducer(defTasks, action)
+    const endTask = tasksReducer(defTasks, action)
 
     expect(endTask['todolistId1'][0].status).toBe(TaskStatuses.New)
     expect(endTask['todolistId1'][0].status).not.toBe(defTasks['todolistId1'][0].status)
@@ -121,7 +121,7 @@ test('new array should be added when new todolist is added', () => {
 
     const action = addTodoListAC('new todoList')
 
-    const endState = TasksReducer(defTasks, action)
+    const endState = tasksReducer(defTasks, action)
 
 
     const keys = Object.keys(endState)

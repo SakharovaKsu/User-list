@@ -2,6 +2,7 @@ import {AddTodoListType, RemoveTodoListType, SetTodoListType} from './TodoListRe
 import {Dispatch} from 'redux';
 import {tasksAPI} from '../api/tasksApi';
 import {AppRootStateType} from './store';
+import {setAppStatusAC, SetStatusType} from './AppReducer';
 
 // Для определения статуса таски, выполнена или нет
 export enum TaskStatuses {
@@ -51,11 +52,11 @@ type AddTasksType = ReturnType<typeof addTaskAC>
 type UpdateTaskType = ReturnType<typeof updateTaskAC>
 type SetTasksType = ReturnType<typeof setTasksAC>
 
-type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | AddTodoListType | RemoveTodoListType | SetTodoListType | SetTasksType
+type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | AddTodoListType | RemoveTodoListType | SetTodoListType | SetTasksType | SetStatusType
 
 const initialState: TaskAssocType = {}
 
-export const TasksReducer = (state = initialState, action: tsarType): TaskAssocType => {
+export const tasksReducer = (state = initialState, action: tsarType): TaskAssocType => {
     switch (action.type) {
         // возвращаем таски, которые наполнены на всю длину todoList
         // когда в компоненте TodoList мэпом пробежимся по таскам, которых может и не быть, то не появится undefined, так как здесь мы подготовили заготовку для этого
@@ -106,63 +107,51 @@ export const TasksReducer = (state = initialState, action: tsarType): TaskAssocT
     }
 }
 
-export const removeTaskAC = (todoListId: string, taskId: string) => {
-    return {
-        type: 'REMOVE-TASK',
-        payload: {todoListId, taskId}
-    } as const
-}
-
-export const addTaskAC = (task: TasksType) => {
-    return {
-        type: 'ADD-TASK',
-        payload: {task}
-    } as const
-}
-
-export const updateTaskAC = (todoListId: string, taskId: string, model: UpdateTaskModuleType) => {
-    return {
-        type: 'UPDATE-TASK',
-        payload: {todoListId, taskId, model}
-    } as const
-}
-
-export const setTasksAC = (todoID: string, tasks: TasksType[]) => {
-   return {
-       type: 'SET-TASKS',
-       payload: {todoID, tasks}
-   } as const
-}
+export const removeTaskAC = (todoListId: string, taskId: string) => ({type: 'REMOVE-TASK', payload: {todoListId, taskId}} as const)
+export const addTaskAC = (task: TasksType) => ({type: 'ADD-TASK', payload: {task}} as const)
+export const updateTaskAC = (todoListId: string, taskId: string, model: UpdateTaskModuleType) => ({type: 'UPDATE-TASK', payload: {todoListId, taskId, model}} as const)
+export const setTasksAC = (todoID: string, tasks: TasksType[]) => ({type: 'SET-TASKS', payload: {todoID, tasks}} as const)
 
 export const getTasksTC = (todoID: string) => {
-    return (dispatch: Dispatch) => {
+    return (dispatch: Dispatch<tsarType>) => {
+        dispatch(setAppStatusAC('loading'))
         tasksAPI.getTasks(todoID)
             .then((res) => {
                 dispatch(setTasksAC(todoID, res.data.items))
+            })
+            .catch(() => {})
+            .finally(() => {
+                dispatch(setAppStatusAC('idle'))
             })
     }
 }
 
 export const removeTaskTC = (todoID: string, tasksID: string) => {
-    return (dispatch: Dispatch) => {
+    return (dispatch: Dispatch<tsarType>) => {
+        dispatch(setAppStatusAC('loading'))
         tasksAPI.deleteTasks(todoID, tasksID)
             .then((res) => {
                 dispatch(removeTaskAC(todoID, tasksID))
+                dispatch(setAppStatusAC('idle'))
             })
+            .catch(() => {})
     }
 }
 
 export const addTaskTC = (todoID: string, title: string) => {
-    return (dispatch: Dispatch) => {
+    return (dispatch: Dispatch<tsarType>) => {
+        dispatch(setAppStatusAC('loading'))
         tasksAPI.createTasks(todoID, title)
             .then((res) => {
                 dispatch(addTaskAC(res.data.data.item))
+                dispatch(setAppStatusAC('idle'))
             })
+            .catch(() => {})
     }
 }
 
 export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateTaskModuleType ) =>
-    (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    (dispatch: Dispatch<tsarType>, getState: () => AppRootStateType) => {
 
         const task = getState().tasks[todolistId].find(t => t.id === taskId)
         if (!task) {
@@ -186,8 +175,11 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
             status: newStatus[task.status]
         }
 
+        dispatch(setAppStatusAC('loading'))
         tasksAPI.updateTasks(todolistId, taskId, apiModel)
             .then(res => {
                 dispatch(updateTaskAC(todolistId, taskId, apiModel))
+                dispatch(setAppStatusAC('idle'))
             })
+            .catch(() => {})
     }

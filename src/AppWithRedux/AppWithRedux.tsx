@@ -9,7 +9,10 @@ import Paper from '@mui/material/Paper';
 import {addTodoListTC, changeFilterAC, getTodoListTC, removeTodoListTC, updateTodoLostTC} from '../state/TodoListReducer';
 import {addTaskTC, removeTaskTC, TaskStatuses, TasksType, updateTaskTC} from '../state/TaskReducer';
 import {useSelector} from 'react-redux';
-import {AppRootStateType, useAppDispatch} from '../state/store';
+import {AppRootStateType, useAppDispatch, useAppSelector} from '../state/store';
+// не забывай конкретизировать импорты в material ui, что б не тормозила загрузка
+import LinearProgress from '@mui/material/LinearProgress';
+
 
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
@@ -27,6 +30,9 @@ function AppWithRedux() {
     // берем данные из store
     const todoList = useSelector<AppRootStateType, TodoListType[]>(state => state.todoLists)
     const tasks = useSelector<AppRootStateType, TaskAssocType>(state => state.tasks)
+
+    // уже протипизированный useSelector
+    const status = useAppSelector(state => state.app.status)
 
     // Получаем функцию dispatch из Redux store. Функция dispatch используется для отправки действий (actions)
     const dispatch = useAppDispatch()
@@ -48,7 +54,6 @@ function AppWithRedux() {
     // id всегда слева первая
     const updateTodoList =  useCallback((todoListId: string, updateTitle: string) => {
         dispatch(updateTodoLostTC(todoListId, updateTitle))
-        // dispatch(updateTodoListAC(todoListId, updateTitle))
     }, [dispatch])
 
     const changeFilter =  useCallback((todoListId: string, value:FilterValuesType) => {
@@ -75,6 +80,7 @@ function AppWithRedux() {
     return (
         <div className="App">
             <ButtonAppBar />
+            {status === 'loading' && <LinearProgress color='success'/>}
 
             <Container fixed>
                 <Grid container style={{padding: '20px 20px 20px 0'}}>

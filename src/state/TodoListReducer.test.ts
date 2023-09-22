@@ -2,7 +2,7 @@ import {
     addTodoListAC,
     changeFilterAC, FilterValuesType,
     removeTodoListAC,
-    TodoListReducer,
+    todoListReducer,
     TodoListEntityType,
     updateTodoListAC
 } from './TodoListReducer';
@@ -21,7 +21,7 @@ beforeEach(() => {
 test ('correct todolist should be removed', () => {
 
     const action = removeTodoListAC('todolistId2')
-    const endState = TodoListReducer(defTodo, action)
+    const endState = todoListReducer(defTodo, action)
 
     expect(endState).toEqual([
         {id: 'todolistId1', title: 'What to learn', filter: 'all', addedData: "", order: 0,}
@@ -33,7 +33,7 @@ test ('correct todolist should be removed', () => {
 test ('correct todolist must be added', () => {
 
     const action = addTodoListAC('List of books')
-    const endState = TodoListReducer([], action)
+    const endState = todoListReducer([], action)
 
     expect(endState.length).toBe(1)
     expect(endState[0].title).toBe('List of books')
@@ -44,7 +44,7 @@ test ('the title of the to-do list should be updated', () => {
     const newTodoListTitle = 'List of books'
 
     const action = updateTodoListAC('todolistId2', newTodoListTitle)
-    const endState = TodoListReducer(defTodo, action)
+    const endState = todoListReducer(defTodo, action)
 
     expect(endState[1].title).toBe('List of books')
 })
@@ -54,7 +54,7 @@ test ('The filter in the right-hand list should change', () => {
     const newTodoListFilter: FilterValuesType = 'completed'
 
     const action = changeFilterAC('todolistId2', newTodoListFilter)
-    const endState = TodoListReducer(defTodo, action)
+    const endState = todoListReducer(defTodo, action)
 
     expect(endState[0].filter).toBe('all')
     expect(endState[1].filter).toBe('completed')
