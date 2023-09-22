@@ -12,9 +12,9 @@ let defTodo: TodoListEntityType[]
 beforeEach(() => {
     defTodo = [
         {id: 'todolistId1', title: 'What to learn', filter: 'all',
-            addedData: '', order: 0},
+            addedData: '', order: 0, entityStatus: 'idle'},
         {id: 'todolistId2', title: 'What to buy', filter: 'all',
-            addedData: '', order: 1}
+            addedData: '', order: 1, entityStatus: 'idle'}
     ]
 })
 

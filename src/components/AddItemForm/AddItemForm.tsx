@@ -4,9 +4,10 @@ import TextField from '@mui/material/TextField';
 
 export type AddItemFormType = {
     callback: (title: string) => void
+    disabled?: boolean
 }
 
-export const AddItemForm:FC<AddItemFormType> = memo( ({callback,}) => {
+export const AddItemForm:FC<AddItemFormType> = memo( ({callback, disabled}) => {
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null >('') // принимает либо строку, либо null
@@ -58,12 +59,16 @@ export const AddItemForm:FC<AddItemFormType> = memo( ({callback,}) => {
                     size={'small'}
                     value={title}
                     onChange={onChangeHandler}
-                    onKeyPress={onKeyPressHandler}/>
+                    onKeyPress={onKeyPressHandler}
+                    disabled={disabled}
+                />
                 {/*в value добавляем title, в котором хранится наше значение в стейте (25 строка)*/}
                 <Button variant="outlined"
                         color="success"
                         style={buttonStyles}
-                        onClick={newTask}>+</Button>
+                        onClick={newTask}
+                        disabled={disabled}
+                >+</Button>
             </div>
 
             {/*если error ровняется true, то показываем ошибку*/}

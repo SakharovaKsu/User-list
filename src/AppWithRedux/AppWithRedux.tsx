@@ -6,7 +6,14 @@ import ButtonAppBar from '../ButtonAppBar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {addTodoListTC, changeFilterAC, getTodoListTC, removeTodoListTC, updateTodoLostTC} from '../state/TodoListReducer';
+import {
+    addTodoListTC,
+    changeFilterAC, FilterValuesType,
+    getTodoListTC,
+    removeTodoListTC,
+    TodoListEntityType,
+    updateTodoLostTC
+} from '../state/TodoListReducer';
 import {addTaskTC, removeTaskTC, TaskStatuses, TasksType, updateTaskTC} from '../state/TaskReducer';
 import {useSelector} from 'react-redux';
 import {AppRootStateType, useAppDispatch, useAppSelector} from '../state/store';
@@ -14,14 +21,6 @@ import {AppRootStateType, useAppDispatch, useAppSelector} from '../state/store';
 import LinearProgress from '@mui/material/LinearProgress';
 import {ErrorSnackbar} from '../components/ErrorShackbar/ErrorShackbar';
 
-
-
-export type FilterValuesType = 'all' | 'active' | 'completed'
-export type TodoListType = {
-    id: string
-    title: string
-    filter: FilterValuesType
-}
 export type TaskAssocType = {
     [key: string]: TasksType[]
 }
@@ -29,7 +28,7 @@ export type TaskAssocType = {
 function AppWithRedux() {
 
     // берем данные из store
-    const todoList = useSelector<AppRootStateType, TodoListType[]>(state => state.todoLists)
+    const todoList = useSelector<AppRootStateType, TodoListEntityType[]>(state => state.todoLists)
     const tasks = useSelector<AppRootStateType, TaskAssocType>(state => state.tasks)
 
     // уже протипизированный useSelector
@@ -99,6 +98,7 @@ function AppWithRedux() {
                                         updateTodoList={updateTodoList}
                                         todoListId={tl.id}
                                         tasks={tasks[tl.id]}
+                                        entityStatus={tl.entityStatus}
                                         todoListTitle={tl.title}
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}

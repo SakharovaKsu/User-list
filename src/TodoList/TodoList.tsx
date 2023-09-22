@@ -9,11 +9,13 @@ import {TaskWithRedux} from '../Task/TaskWithRedux';
 import {getTasksTC, TaskStatuses, TasksType} from '../state/TaskReducer';
 import {FilterValuesType} from '../state/TodoListReducer';
 import {useAppDispatch} from '../state/store';
+import {RequestStatusType} from '../state/AppReducer';
 
 type TodoListPropsType = {
     todoListTitle: string
     todoListId: string
     tasks: TasksType[]
+    entityStatus: RequestStatusType
     removeTask: (todoListId: string, taskId: string) => void
     changeFilter: (todoListId: string, filter:FilterValuesType) => void
     addTask: (todoListId: string, title: string) => void
@@ -28,6 +30,7 @@ const TodoList: FC<TodoListPropsType> = memo(({
     todoListId,
     todoListTitle,
     tasks,
+    entityStatus,
     changeFilter,
     addTask,
     filter,
@@ -87,11 +90,11 @@ const TodoList: FC<TodoListPropsType> = memo(({
             <div>
                 <h3 className={s.title}>
                     <EditableSpan oldTitle={todoListTitle} callback={updateTodoListHandler}/>
-                    <IconButton aria-label="delete" onClick={removeTodoListHandler}>
+                    <IconButton aria-label="delete" onClick={removeTodoListHandler} disabled={entityStatus === 'loading'}>
                         <DeleteIcon />
                     </IconButton>
                 </h3>
-                <AddItemForm callback={addTaskHandler}/>
+                <AddItemForm callback={addTaskHandler} disabled={entityStatus === 'loading'}/>
                 <div>{tasksJSX}</div>
                 <div className={s.button}>
                     <ButtonWithMemo title={'All'}
