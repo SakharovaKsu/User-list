@@ -2,7 +2,7 @@ import {AddTodoListType, RemoveTodoListType, SetTodoListType} from './TodoListRe
 import {Dispatch} from 'redux';
 import {tasksAPI} from '../api/tasksApi';
 import {AppRootStateType} from './store';
-import {setAppStatusAC, SetStatusType} from './AppReducer';
+import {setErrorAC, SetErrorType, setStatusAC, SetStatusType} from './AppReducer';
 
 // Для определения статуса таски, выполнена или нет
 export enum TaskStatuses {
@@ -52,7 +52,7 @@ type AddTasksType = ReturnType<typeof addTaskAC>
 type UpdateTaskType = ReturnType<typeof updateTaskAC>
 type SetTasksType = ReturnType<typeof setTasksAC>
 
-type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | AddTodoListType | RemoveTodoListType | SetTodoListType | SetTasksType | SetStatusType
+type tsarType = RemoveTaskType | AddTasksType | UpdateTaskType | AddTodoListType | RemoveTodoListType | SetTodoListType | SetTasksType | SetStatusType | SetErrorType
 
 const initialState: TaskAssocType = {}
 
@@ -114,25 +114,27 @@ export const setTasksAC = (todoID: string, tasks: TasksType[]) => ({type: 'SET-T
 
 export const getTasksTC = (todoID: string) => {
     return (dispatch: Dispatch<tsarType>) => {
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setStatusAC('loading'))
+
         tasksAPI.getTasks(todoID)
             .then((res) => {
                 dispatch(setTasksAC(todoID, res.data.items))
             })
             .catch(() => {})
             .finally(() => {
-                dispatch(setAppStatusAC('idle'))
+                dispatch(setStatusAC('idle'))
             })
     }
 }
 
 export const removeTaskTC = (todoID: string, tasksID: string) => {
     return (dispatch: Dispatch<tsarType>) => {
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setStatusAC('loading'))
+
         tasksAPI.deleteTasks(todoID, tasksID)
             .then((res) => {
                 dispatch(removeTaskAC(todoID, tasksID))
-                dispatch(setAppStatusAC('idle'))
+                dispatch(setStatusAC('idle'))
             })
             .catch(() => {})
     }
@@ -140,11 +142,19 @@ export const removeTaskTC = (todoID: string, tasksID: string) => {
 
 export const addTaskTC = (todoID: string, title: string) => {
     return (dispatch: Dispatch<tsarType>) => {
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setStatusAC('loading'))
+
         tasksAPI.createTasks(todoID, title)
             .then((res) => {
-                dispatch(addTaskAC(res.data.data.item))
-                dispatch(setAppStatusAC('idle'))
+                if(res.data.resultCode === 0) {
+                    dispatch(addTaskAC(res.data.data.item))
+                    dispatch(setStatusAC('idle'))
+                } else {
+                    const error = res.data.messages[0]
+                    // так как на бэкенде может и не быть массив ошибок, обязательно проверяем на наличие этой массава, если есть, то диспачим
+                    error ? dispatch(setErrorAC(error)) : dispatch(setErrorAC('Some error'))
+                    dispatch(setStatusAC('failed'))
+                }
             })
             .catch(() => {})
     }
@@ -175,11 +185,11 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
             status: newStatus[task.status]
         }
 
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setStatusAC('loading'))
         tasksAPI.updateTasks(todolistId, taskId, apiModel)
             .then(res => {
                 dispatch(updateTaskAC(todolistId, taskId, apiModel))
-                dispatch(setAppStatusAC('idle'))
+                dispatch(setStatusAC('idle'))
             })
             .catch(() => {})
     }

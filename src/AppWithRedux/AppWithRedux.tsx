@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
 import '../App.css';
 import TodoList from '../TodoList/TodoList';
-import AddItemForm from '../AddItemForm/AddItemForm';
+import AddItemForm from '../components/AddItemForm/AddItemForm';
 import ButtonAppBar from '../ButtonAppBar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -12,6 +12,7 @@ import {useSelector} from 'react-redux';
 import {AppRootStateType, useAppDispatch, useAppSelector} from '../state/store';
 // не забывай конкретизировать импорты в material ui, что б не тормозила загрузка
 import LinearProgress from '@mui/material/LinearProgress';
+import {ErrorSnackbar} from '../components/ErrorShackbar/ErrorShackbar';
 
 
 
@@ -79,6 +80,7 @@ function AppWithRedux() {
 
     return (
         <div className="App">
+            <ErrorSnackbar />
             <ButtonAppBar />
             {status === 'loading' && <LinearProgress color='success'/>}
 

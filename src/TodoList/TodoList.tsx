@@ -1,7 +1,7 @@
 import React, {FC, useCallback, memo, useEffect} from 'react';
 import s from './TodoList.module.css';
-import AddItemForm from '../AddItemForm/AddItemForm';
-import EditableSpan from '../EditableSpan/EditableSpan';
+import AddItemForm from '../components/AddItemForm/AddItemForm';
+import EditableSpan from '../components/EditableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {ButtonWithMemo} from '../ButtonWithMemo';

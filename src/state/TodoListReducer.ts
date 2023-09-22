@@ -1,7 +1,7 @@
 import {v1} from 'uuid';
 import {todoListsAPI} from '../api/todoListsAPI';
 import {Dispatch} from 'redux';
-import {setAppStatusAC, SetStatusType} from './AppReducer';
+import {setStatusAC, SetStatusType} from './AppReducer';
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 type FilterType = {
@@ -63,25 +63,25 @@ export const setTodoListAC = (todoLists: TodoListsType[]) => ({type: 'SET-TODOLI
 
 export const getTodoListTC = () => {
     return (dispatch: Dispatch<TsarType>) => {
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setStatusAC('loading'))
         todoListsAPI.getTodoLists()
             .then((res) => {
                 dispatch(setTodoListAC(res.data))
             })
             .catch(() => {})
             .finally(() => {
-                dispatch(setAppStatusAC('idle'))
+                dispatch(setStatusAC('idle'))
             })
     }
 }
 
 export const removeTodoListTC = (todoID: string) => {
     return (dispatch: Dispatch<TsarType>) => {
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setStatusAC('loading'))
         todoListsAPI.deleteTodolist(todoID)
             .then((res) => {
                 dispatch(removeTodoListAC(todoID))
-                dispatch(setAppStatusAC('idle'))
+                dispatch(setStatusAC('idle'))
             })
             .catch(() => {})
     }
@@ -89,11 +89,11 @@ export const removeTodoListTC = (todoID: string) => {
 
 export const addTodoListTC = (newTitle: string) => {
     return (dispatch: Dispatch<TsarType>) => {
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setStatusAC('loading'))
         todoListsAPI.createTodolist(newTitle)
             .then(res => {
                 dispatch(addTodoListAC(newTitle))
-                dispatch(setAppStatusAC('idle'))
+                dispatch(setStatusAC('idle'))
             })
             .catch(() => {})
     }
@@ -101,11 +101,11 @@ export const addTodoListTC = (newTitle: string) => {
 
 export const updateTodoLostTC = (todoID: string, updateTitle: string) => {
     return (dispatch: Dispatch<TsarType>) => {
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setStatusAC('loading'))
         todoListsAPI.updateTodolistTitle(todoID, updateTitle)
             .then(res => {
                 dispatch(updateTodoListAC(todoID, updateTitle))
-                dispatch(setAppStatusAC('idle'))
+                dispatch(setStatusAC('idle'))
             })
             .catch(() => {})
     }
