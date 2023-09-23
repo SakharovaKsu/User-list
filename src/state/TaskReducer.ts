@@ -3,6 +3,7 @@ import {Dispatch} from 'redux';
 import {tasksAPI} from '../api/tasksApi';
 import {AppRootStateType} from './store';
 import {setErrorAC, SetErrorType, setStatusAC, SetStatusType} from './AppReducer';
+import {handleServerAppError, handleServerNetworkError} from '../utils/error-utils';
 
 // Для определения статуса таски, выполнена или нет
 export enum TaskStatuses {
@@ -18,6 +19,12 @@ export enum TodoTaskPriority {
     Hi = 2,
     Urgently = 3,
     Later = 4
+}
+
+export enum RESULT_CODE {
+    OK = 0,
+    ERROR = 1,
+    ERROR_CAPTCHA = 10
 }
 
 export type UpdateTaskModuleType = Partial<{
@@ -146,17 +153,17 @@ export const addTaskTC = (todoID: string, title: string) => {
 
         tasksAPI.createTasks(todoID, title)
             .then((res) => {
-                if(res.data.resultCode === 0) {
+                if(res.data.resultCode === RESULT_CODE.OK) {
                     dispatch(addTaskAC(res.data.data.item))
                     dispatch(setStatusAC('idle'))
                 } else {
-                    const error = res.data.messages[0]
-                    // так как на бэкенде может и не быть массив ошибок, обязательно проверяем на наличие этой массава, если есть, то диспачим
-                    error ? dispatch(setErrorAC(error)) : dispatch(setErrorAC('Some error'))
-                    dispatch(setStatusAC('failed'))
+                    // так как на бэкенде может и не быть массив ошибок, обязательно проверяем на наличие этой массава, если есть, то диспачим (handleServerAppError)
+                    handleServerAppError(res.data, dispatch)
                 }
             })
-            .catch(() => {})
+            .catch((e) => {
+                handleServerNetworkError(e.message, dispatch)
+            })
     }
 }
 
@@ -188,8 +195,14 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
         dispatch(setStatusAC('loading'))
         tasksAPI.updateTasks(todolistId, taskId, apiModel)
             .then(res => {
-                dispatch(updateTaskAC(todolistId, taskId, apiModel))
-                dispatch(setStatusAC('idle'))
+                if(res.data.resultCode === RESULT_CODE.OK) {
+                    dispatch(updateTaskAC(todolistId, taskId, apiModel))
+                    dispatch(setStatusAC('idle'))
+                } else {
+                    handleServerAppError(res.data, dispatch)
+                }
             })
-            .catch(() => {})
+            .catch((e) => {
+                handleServerNetworkError(e.message, dispatch)
+            })
     }

@@ -2,6 +2,8 @@ import {v1} from 'uuid';
 import {todoListsAPI} from '../api/todoListsAPI';
 import {Dispatch} from 'redux';
 import {RequestStatusType, setErrorAC, SetErrorType, setStatusAC, SetStatusType} from './AppReducer';
+import {RESULT_CODE} from './TaskReducer';
+import {handleServerAppError, handleServerNetworkError} from '../utils/error-utils';
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 type FilterAndStatusType = {
@@ -87,13 +89,17 @@ export const removeTodoListTC = (todoID: string) => {
         dispatch(setEntityStatusTodoListAC(todoID, 'loading'))
         todoListsAPI.deleteTodolist(todoID)
             .then((res) => {
-                dispatch(removeTodoListAC(todoID))
-                dispatch(setStatusAC('idle'))
-                dispatch(setEntityStatusTodoListAC(todoID, 'idle'))
+                if(res.data.resultCode === RESULT_CODE.OK) {
+                    dispatch(removeTodoListAC(todoID))
+                    dispatch(setStatusAC('idle'))
+                    dispatch(setEntityStatusTodoListAC(todoID, 'idle'))
+                } else {
+                    // так как на бэкенде может и не быть массив ошибок, обязательно проверяем на наличие этой массава, если есть, то диспачим (handleServerAppError)
+                    handleServerAppError(res.data, dispatch)
+                }
             })
             .catch((e) => {
-                dispatch(setErrorAC(e.message))
-                dispatch(setStatusAC('failed'))
+                handleServerNetworkError(e.message, dispatch)
                 dispatch(setEntityStatusTodoListAC(todoID, 'failed'))
             })
     }
@@ -119,6 +125,8 @@ export const updateTodoLostTC = (todoID: string, updateTitle: string) => {
                 dispatch(updateTodoListAC(todoID, updateTitle))
                 dispatch(setStatusAC('idle'))
             })
-            .catch(() => {})
+            .catch((e) => {
+                handleServerNetworkError(e.message, dispatch)
+            })
     }
 }
