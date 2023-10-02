@@ -41,6 +41,9 @@ export const Login = () => {
         },
         onSubmit: (values) => {
             alert(JSON.stringify(values));
+
+            // очищаем форму после отправки
+            formik.resetForm()
         },
     })
 
@@ -66,27 +69,34 @@ export const Login = () => {
                                    margin='normal'
 
                                    // засчет name, формик понимает куда записать значения в initialValues, если name не укажет, то и значение не добавит
-                                   name={'email'}
-                                   onBlur={formik.handleBlur}
-                                   onChange={formik.handleChange}
-                                   value={formik.values.email}
+                                   // name={'email'}
+                                   // onBlur={formik.handleBlur}
+                                   // onChange={formik.handleChange}
+                                   // value={formik.values.email}
+
+                                   {...formik.getFieldProps('email')}
                         />
                         {formik.touched.email && formik.errors.email && <div style={{color: 'red'}}>{formik.errors.email}</div>}
 
                         <TextField type='password'
                                    label='Password'
                                    margin='normal'
-                                   name={'password'}
-                                   onBlur={formik.handleBlur}
-                                   onChange={formik.handleChange}
-                                   value={formik.values.password}
+
+                                   // name={'password'}
+                                   // onBlur={formik.handleBlur}
+                                   // onChange={formik.handleChange}
+                                   // value={formik.values.password}
+                                   // что бы не дублировать код, который выше, используем getFieldProps //
+                                   {...formik.getFieldProps('password')}
                         />
                         {/* touched для того что б показал ошибку, после того как отработало поле*/}
-                        {formik.touched.password && formik.errors.password && <div style={{color: 'red'}}>{formik.errors.password}</div>}
+                        {formik.touched.password && formik.errors.password && <div style={{color: 'red'}}>{formik.errors.rememberMe}</div>}
 
                         <FormControlLabel label={'Remember me'}
-                                          control={<Checkbox/>}
-                                          name={'rememberMe'}
+                                          control={
+                            <Checkbox checked={formik.values.rememberMe}
+                                      {...formik.getFieldProps('email')}
+                            />}
                         />
                         <Button type={'submit'} variant={'contained'} color={'success'}>
                             Login
