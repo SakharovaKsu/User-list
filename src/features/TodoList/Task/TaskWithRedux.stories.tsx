@@ -1,14 +1,14 @@
 import {Meta, StoryObj} from '@storybook/react';
 import {TaskWithRedux} from './TaskWithRedux';
 import React, {useCallback} from 'react';
-import {ReduxStoreProviderDecorator} from '../state/ReduxStoreProviderDecorator';
+import {ReduxStoreProviderDecorator} from '../../../state/ReduxStoreProviderDecorator';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from '../state/store';
+import {AppRootStateType} from '../../../state/store';
 import {
     removeTaskAC,
     TaskStatuses,
     TasksType, updateTaskAC
-} from '../state/TaskReducer';
+} from '../../../state/TaskReducer';
 
 
 const meta: Meta<typeof TaskWithRedux> = {
