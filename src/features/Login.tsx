@@ -28,7 +28,7 @@ export const Login = () => {
                                margin="normal"
                     />
                     <FormControlLabel label={'Remember me'} control={<Checkbox/>}/>
-                    <Button type={'submit'} variant={'contained'} color={'primary'}>
+                    <Button type={'submit'} variant={'contained'} color={'success'}>
                         Login
                     </Button>
                 </FormGroup>
