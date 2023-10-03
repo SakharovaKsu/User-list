@@ -14,6 +14,7 @@ import {
 } from '../state/TodoListReducer';
 import {addTaskTC, removeTaskTC, TaskStatuses, updateTaskTC} from '../state/TaskReducer';
 import {TaskAssocType} from '../AppWithRedux/AppWithRedux';
+import { Navigate } from 'react-router-dom';
 
 export const TodolistsList = () => {
 
@@ -23,6 +24,7 @@ export const TodolistsList = () => {
 
     // уже протипизированный useSelector
     const status = useAppSelector(state => state.app.status)
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 
     // Получаем функцию dispatch из Redux store. Функция dispatch используется для отправки действий (actions)
     const dispatch = useAppDispatch()
@@ -66,6 +68,11 @@ export const TodolistsList = () => {
     const changeStatus = useCallback((todoListId: string, taskID: string, status: TaskStatuses) => {
         dispatch(updateTaskTC(todoListId, taskID, {status: status}))
     }, [dispatch])
+
+    // Если мы не залогинены, то переотправит на страницу
+    if(isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
 
     return (
         <div>

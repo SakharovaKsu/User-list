@@ -17,7 +17,7 @@ export type ResponseType<T = {}> = {
 // В baseURL прописываем путь, который дублируется везде (для рефакторинга).
 // create - это метод в библиотеке, который позволяет создавать новые экземпляры Axios с настраиваемой конфигурацией.
 
-const instance = axios.create({
+export const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
     withCredentials: true,
 
