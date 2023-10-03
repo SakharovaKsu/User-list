@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import {SetErrorType, setStatusAC, SetStatusType} from './AppReducer';
+import {SetErrorType, setIsInitializedAC, SetIsInitializedType, setStatusAC, SetStatusType} from './AppReducer';
 import {authAPI} from '../api/authAPI';
 import {FormType} from '../features/Login';
 import {RESULT_CODE} from './TaskReducer';
@@ -38,6 +38,38 @@ export const loginTC = (data: FormType) => async (dispatch: Dispatch<ActionsType
     }
 }
 
+export const meTC = () => async (dispatch: Dispatch<ActionsType>) => {
+    try {
+        const res = await authAPI.me()
+        if (res.data.resultCode ===  RESULT_CODE.OK) {
+            dispatch(setIsLoggedInAC(true))
+            dispatch(setStatusAC('idle'))
+        } else {
+            handleServerAppError(res.data, dispatch)
+        }
+    } catch(e) {
+        handleServerNetworkError((e as {message: string}).message, dispatch)
+    }
+    finally {
+        dispatch(setIsInitializedAC(true))
+    }
+}
+
+export const logOutTC = () => async (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setStatusAC('loading'))
+    try {
+        const res = await authAPI.logOut()
+        if(res.data.resultCode === RESULT_CODE.OK) {
+            dispatch(setIsLoggedInAC(false))
+            dispatch(setStatusAC('idle'))
+        } else {
+            handleServerAppError(res.data, dispatch)
+        }
+    } catch(e) {
+        handleServerNetworkError((e as {message: string}).message, dispatch)
+    }
+}
+
 
 // types
-type ActionsType = ReturnType<typeof setIsLoggedInAC> | SetStatusType | SetErrorType
+type ActionsType = ReturnType<typeof setIsLoggedInAC> | SetStatusType | SetErrorType | SetIsInitializedType

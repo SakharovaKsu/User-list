@@ -53,9 +53,10 @@ export const Login = () => {
             formik.resetForm()
         },
     })
-
+    console.log(isLoggedIn, ' login')
     // Если мы залогинены, то переотправит на страницу
     if(isLoggedIn) {
+        console.log('ddd1')
         return <Navigate to={'/'}/>
     }
 
@@ -107,7 +108,7 @@ export const Login = () => {
                         <FormControlLabel label={'Remember me'}
                                           control={
                             <Checkbox checked={formik.values.rememberMe}
-                                      {...formik.getFieldProps('email')}
+                                      {...formik.getFieldProps('rememberMe')}
                             />}
                         />
                         <Button type={'submit'} variant={'contained'} color={'success'}>

@@ -14,13 +14,11 @@ const root = ReactDOM.createRoot(
 // Даём доступ компонентам к store, используя Provider
 
 root.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <BrowserRouter>
-                <AppWithRedux/>
-            </BrowserRouter>
-        </Provider>
-    </React.StrictMode>
+    <Provider store={store}>
+        <BrowserRouter>
+            <AppWithRedux/>
+        </BrowserRouter>
+    </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

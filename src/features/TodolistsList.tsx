@@ -23,14 +23,15 @@ export const TodolistsList = () => {
     const tasks = useSelector<AppRootStateType, TaskAssocType>(state => state.tasks)
 
     // уже протипизированный useSelector
-    const status = useAppSelector(state => state.app.status)
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-
+    console.log(isLoggedIn, ' todo')
     // Получаем функцию dispatch из Redux store. Функция dispatch используется для отправки действий (actions)
     const dispatch = useAppDispatch()
 
     // сетаем туду листы
     useEffect(() => {
+        // если пользователь не залогинен, то прирываем эффект
+        if(!isLoggedIn) return
         dispatch(getTodoListTC())
     }, [])
 
@@ -70,7 +71,7 @@ export const TodolistsList = () => {
     }, [dispatch])
 
     // Если мы не залогинены, то переотправит на страницу
-    if(isLoggedIn) {
+    if(!isLoggedIn) {
         return <Navigate to={'/login'}/>
     }
 
