@@ -1,19 +1,22 @@
 import React from 'react'
 import {Provider} from "react-redux";
-import {AppRootStateType} from './store';
-import {combineReducers,  legacy_createStore} from "redux";
+import {AppRootStateType, RootReducerType} from './store';
+import {applyMiddleware, combineReducers, legacy_createStore} from 'redux';
 import {v1} from "uuid";
 import {tasksReducer, TaskStatuses, TodoTaskPriority} from './TaskReducer';
 import {todoListReducer} from './TodoListReducer';
 import {appReducer} from './AppReducer';
+import {authReducer} from './authReducer';
+import thunkMiddleware from 'redux-thunk';
 
 // Это декоратор для сторибука для компонентов где используется редакс
 // Пишем что-то наподобие HOC
 
-const rootReducer = combineReducers({
+const rootReducer: RootReducerType = combineReducers({
     tasks: tasksReducer,
     todoLists: todoListReducer,
-    app: appReducer
+    app: appReducer,
+    auth: authReducer
 })
 
 const initialGlobalState: AppRootStateType = {
@@ -49,14 +52,14 @@ const initialGlobalState: AppRootStateType = {
             }
         ]
     },
-    app: {status: 'loading', error: null, isInitialized: false},
-    auth: {isLoggedIn: false}
+    app: {status: 'loading', error: null, isInitialized: true},
+    auth: {isLoggedIn: true}
 };
 
-export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState);
+// export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState)
+export const storyBookStore = legacy_createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 export const ReduxStoreProviderDecorator = (fn:() => React.ReactNode) => {
     return <Provider store={storyBookStore}>{fn()}</Provider>
 }
 
-// возникает ошибка когда добавляю вместо store - storyBookStore

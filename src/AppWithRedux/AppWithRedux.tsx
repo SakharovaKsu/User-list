@@ -35,12 +35,6 @@ const Header = () => {
     return (
         <AppBar position="static"  color='default'>
             <Toolbar>
-                <IconButton edge='start' color='inherit' aria-label='menu'>
-                    <Menu/>
-                </IconButton>
-                <Typography variant='h6'>
-                    News
-                </Typography>
                 {isLoggedIn && <Button color="inherit" onClick={logOutHandler}>LogOut</Button>}
             </Toolbar>
             {status === 'loading' && <LinearProgress color='success'/>}

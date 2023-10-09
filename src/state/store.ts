@@ -22,6 +22,8 @@ export const store = legacy_createStore(rootReducer, applyMiddleware(thunkMiddle
 // если не будет использовать thunkMiddleware - увидим ошибку: Error: Actions must be plain objects. Use custom middleware for async actions.​
 // Redux ругается, что можем диспатчить только plain (простые) объекты-экшены… если хотите чего покруче, то юзайте промежуточные перехватчики middlew
 
+export type RootReducerType = typeof rootReducer
+
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>
 

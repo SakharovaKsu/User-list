@@ -53,10 +53,9 @@ export const Login = () => {
             formik.resetForm()
         },
     })
-    console.log(isLoggedIn, ' login')
+
     // Если мы залогинены, то переотправит на страницу
     if(isLoggedIn) {
-        console.log('ddd1')
         return <Navigate to={'/'}/>
     }
 
